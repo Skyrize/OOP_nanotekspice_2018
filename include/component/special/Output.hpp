@@ -8,13 +8,13 @@
 #ifndef SRC_OUTPUT_HPP_
 #define SRC_OUTPUT_HPP_
 
-#include "nts.hpp"
+#include "Component.hpp"
 
 namespace nts {
 
-class Output: public IComponent {
+class Output: public Component {
 	public:
-		Output();
+		Output(const std::string &name);
 		virtual ~Output();
 };
 

@@ -2,21 +2,21 @@
  ** EPITECH PROJECT, 2019
  ** OOP_nanotekspice_2018
  ** File description: Created on: 30 janv. 2019
- ** Input.cpp
+ ** Component4094.cpp
  */
 
-#include "Input.hpp"
+#include "Component4094.hpp"
 
 namespace nts {
 
-Input::Input(const std::string &name)
+Component4094::Component4094(const std::string& name)
 : Component(name)
 {
 	// TODO Auto-generated constructor stub
 
 }
 
-Input::~Input()
+Component4094::~Component4094()
 {
 	// TODO Auto-generated destructor stub
 }

@@ -9,7 +9,8 @@
 
 namespace nts {
 
-Output::Output()
+Output::Output(const std::string &name)
+: Component(name)
 {
 	// TODO Auto-generated constructor stub
 

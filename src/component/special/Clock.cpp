@@ -9,7 +9,8 @@
 
 namespace nts {
 
-Clock::Clock()
+Clock::Clock(const std::string &name)
+: Input(name)
 {
 	// TODO Auto-generated constructor stub
 
