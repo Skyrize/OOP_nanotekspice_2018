@@ -27,7 +27,8 @@ namespace nts {
             virtual nts::Tristate compute(size_t pin = 1) = 0;
             virtual void setLink(size_t pin, nts::IComponent &other, size_t otherPin) = 0;
             virtual void dump() const = 0;
-            virtual class Pin *getPin(size_t pin) const = 0;
+            virtual class Pin &getPin(const size_t &pin) = 0;
+            virtual std::string getName(void) const = 0;
     };
 }
 

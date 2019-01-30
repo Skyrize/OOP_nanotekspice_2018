@@ -22,13 +22,14 @@ namespace nts {
             Pin();
             virtual ~Pin() = default;
             void setState(Tristate state) { _state = state; };
-            void setLink(IComponent *link) { _link = link; };
+            void setLink(const class Pin &link) { _link = link; };
             Tristate getState(void) { return _state; };
-            IComponent *getLink(void) { return _link; };
+            const class Pin &getLink(void) { return _link; };
+            void operator=(const class Pin &pin);
         
         private:
             Tristate _state = UNDEFINED;
-            IComponent *_link = nullptr;
+            class Pin &_link;
             mode _mode = DEFAULT;
 
     };

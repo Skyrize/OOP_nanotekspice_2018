@@ -8,68 +8,73 @@
 #ifndef SRC_NANOERROR_HPP_
 #define SRC_NANOERROR_HPP_
 
+#include "nts.hpp"
 #include <exception>
 #include <string>
 
-class NanoError: public std::exception {
-	public:
-		NanoError(std::string const &message);
-		virtual ~NanoError();
+namespace nts {
 
-        const char *what() const noexcept override { return _message.data();};
+    class NanoError: public std::exception {
+        public:
+            NanoError(std::string const &message);
+            virtual ~NanoError();
 
-	protected:
-        std::string _message;
-};
+            const char *what() const noexcept override { return _message.data();};
 
-class CircuitFileError : public NanoError {
-	public:
-		CircuitFileError(std::string const &message = "The circuit file includes one or several lexical or syntactic errors.");
-};
+        protected:
+            std::string _message;
+    };
 
-class ComponentTypeError : public NanoError {
-	public:
-		ComponentTypeError(std::string const &message = "A component type is unknown.");
-};
+    class CircuitFileError : public NanoError {
+        public:
+            CircuitFileError(std::string const &message = "The circuit file includes one or several lexical or syntactic errors.");
+    };
 
-class ComponentNameError : public NanoError {
-	public:
-		ComponentNameError(std::string const &message = "A component name is unknown.");
-};
+    class ComponentTypeError : public NanoError {
+        public:
+            ComponentTypeError(std::string const &message = "A component type is unknown.");
+    };
 
-class UnexistingPinError : public NanoError {
-	public:
-		UnexistingPinError(std::string const &message = "A requested pin does not exist.");
-};
+    class ComponentNameError : public NanoError {
+        public:
+            ComponentNameError(std::string const &message = "A component name is unknown.");
+    };
 
-class RedefinedComponentError : public NanoError {
-	public:
-		RedefinedComponentError(std::string const &message = "Several components share the same name.");
-};
+    class UnexistingPinError : public NanoError {
+        public:
+            UnexistingPinError(std::string const &message = "A requested pin does not exist.");
+    };
 
-class UnlinkedOutputError : public NanoError {
-	public:
-		UnlinkedOutputError(std::string const &message = "One or several outputs are not linked.");
-};
+    class RedefinedComponentError : public NanoError {
+        public:
+            RedefinedComponentError(std::string const &message = "Several components share the same name.");
+    };
 
-class UnprovidedInputError : public NanoError {
-	public:
-		UnprovidedInputError(std::string const &message = "One or several input values were not provided on the command line.");
-};
+    class UnlinkedOutputError : public NanoError {
+        public:
+            UnlinkedOutputError(std::string const &message = "One or several outputs are not linked.");
+    };
 
-class UnknowInputError : public NanoError {
-	public:
-		UnknowInputError(std::string const &message = "A provided input is unknown.");
-};
+    class UnprovidedInputError : public NanoError {
+        public:
+            UnprovidedInputError(std::string const &message = "One or several input values were not provided on the command line.");
+    };
 
-class MissingChipsetSectionError : public NanoError {
-	public:
-		MissingChipsetSectionError(std::string const &message = "No chipset section.");
-};
+    class UnknowInputError : public NanoError {
+        public:
+            UnknowInputError(std::string const &message = "A provided input is unknown.");
+    };
 
-class MissingLinksSectionError : public NanoError {
-	public:
-		MissingLinksSectionError(std::string const &message = "No links section.");
-};
+    class MissingChipsetSectionError : public NanoError {
+        public:
+            MissingChipsetSectionError(std::string const &message = "No chipset section.");
+    };
+
+    class MissingLinksSectionError : public NanoError {
+        public:
+            MissingLinksSectionError(std::string const &message = "No links section.");
+    };
+
+}
 
 #endif /* SRC_NANOERROR_HPP_ */
