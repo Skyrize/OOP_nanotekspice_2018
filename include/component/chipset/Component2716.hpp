@@ -8,13 +8,13 @@
 #ifndef SRC_COMPONENT_CHIPSET_COMPONENT2716_HPP_
 #define SRC_COMPONENT_CHIPSET_COMPONENT2716_HPP_
 
-#include "nts.hpp"
+#include "Component.hpp"
 
 namespace nts {
 
-class Component2716: public IComponent {
+class Component2716: public Component {
 	public:
-		Component2716();
+		Component2716(const std::string& name);
 		virtual ~Component2716();
 };
 

@@ -9,7 +9,8 @@
 
 namespace nts {
 
-False::False()
+False::False(const std::string &name)
+: Input(name)
 {
 	// TODO Auto-generated constructor stub
 

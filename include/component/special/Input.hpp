@@ -8,13 +8,13 @@
 #ifndef SRC_INPUT_HPP_
 #define SRC_INPUT_HPP_
 
-#include "nts.hpp"
+#include "Component.hpp"
 
 namespace nts {
 
-class Input: public IComponent {
+class Input: public Component {
 	public:
-		Input();
+		Input(const std::string &name);
 		virtual ~Input();
 };
 

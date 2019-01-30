@@ -14,7 +14,7 @@ namespace nts {
 
 class True: public Input {
 	public:
-		True();
+		True(const std::string &name);
 		virtual ~True();
 };
 

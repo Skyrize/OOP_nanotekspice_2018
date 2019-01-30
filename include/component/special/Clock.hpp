@@ -14,7 +14,7 @@ namespace nts {
 
 class Clock: public Input {
 	public:
-		Clock();
+		Clock(const std::string &name);
 		virtual ~Clock();
 };
 

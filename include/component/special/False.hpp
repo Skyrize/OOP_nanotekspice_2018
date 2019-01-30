@@ -14,7 +14,7 @@ namespace nts {
 
 class False: public Input {
 	public:
-		False();
+		False(const std::string &name);
 		virtual ~False();
 };
 
