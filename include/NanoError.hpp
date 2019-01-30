@@ -75,6 +75,11 @@ namespace nts {
             MissingLinksSectionError(std::string const &message = "No links section.");
     };
 
+    class UsageError : public NanoError {
+        public:
+    		UsageError(std::string const &message = "Usage: ./nanotekspice [circuit_file.nts] [component=value ...]");
+    };
+
 }
 
 #endif /* SRC_NANOERROR_HPP_ */

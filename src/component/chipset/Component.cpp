@@ -31,15 +31,13 @@ void Component::dump() const
 {
 }
 
-class Pin* Component::getPin(size_t pin) const
-{
-		(void)pin;
-		return nullptr;
-}
-
-} /* namespace nts */
-
 nts::Component::Component(const std::string& name)
 : name(name)
 {
+}
+
+class Pin *nts::Component::getPin(const size_t& pin)
+{
+		return this->pins[pin];
+}
 }

@@ -8,7 +8,7 @@
 #include <map>
 #include <memory>
 #include "NanoError.hpp"
-#include "nts.hpp"
+#include "Factory.hpp"
 #include "Component2716.hpp"
 #include "Component4001.hpp"
 #include "Component4008.hpp"
@@ -23,6 +23,11 @@
 #include "Component4094.hpp"
 #include "Component4514.hpp"
 #include "Component4801.hpp"
+#include "Input.hpp"
+#include "Output.hpp"
+#include "Clock.hpp"
+#include "False.hpp"
+#include "True.hpp"
 
 namespace nts {
 namespace Factory {
@@ -32,18 +37,23 @@ using methodPtr = std::unique_ptr<IComponent> (*)(const std::string &value);
 static std::map<const std::string, methodPtr> methodPointers = {
 		{"2716", &create2716},
 		{"4001", &create4001},
-		{"4001", &create4008},
-		{"4001", &create4011},
-		{"4001", &create4013},
-		{"4001", &create4017},
-		{"4001", &create4030},
-		{"4001", &create4040},
-		{"4001", &create4069},
-		{"4001", &create4071},
-		{"4001", &create4081},
-		{"4001", &create4094},
-		{"4001", &create4514},
-		{"4001", &create4801},
+		{"4008", &create4008},
+		{"4011", &create4011},
+		{"4013", &create4013},
+		{"4017", &create4017},
+		{"4030", &create4030},
+		{"4040", &create4040},
+		{"4069", &create4069},
+		{"4071", &create4071},
+		{"4081", &create4081},
+		{"4094", &create4094},
+		{"4514", &create4514},
+		{"4801", &create4801},
+		{"input", &createInput},
+		{"output", &createOutput},
+		{"clock", &createClock},
+		{"false", &createFalse},
+		{"true", &createTrue}
 };
 
 std::unique_ptr<IComponent> createComponent(const std::string &type, std::string &value)
@@ -119,9 +129,39 @@ std::unique_ptr<IComponent> create4514(const std::string &value)
 	return std::unique_ptr<IComponent>(new Component4514(value));
 }
 
+std::unique_ptr<IComponent> createComponent(std::string& type,
+		const std::string& value)
+{
+}
+
 std::unique_ptr<IComponent> create4801(const std::string &value)
 {
 	return std::unique_ptr<IComponent>(new Component4801(value));
+}
+
+std::unique_ptr<IComponent> createInput(const std::string& value)
+{
+	return std::unique_ptr<IComponent>(new Input(value));
+}
+
+std::unique_ptr<IComponent> createOutput(const std::string& value)
+{
+	return std::unique_ptr<IComponent>(new Output(value));
+}
+
+std::unique_ptr<IComponent> createClock(const std::string& value)
+{
+	return std::unique_ptr<IComponent>(new Clock(value));
+}
+
+std::unique_ptr<IComponent> createTrue(const std::string& value)
+{
+	return std::unique_ptr<IComponent>(new True(value));
+}
+
+std::unique_ptr<IComponent> createFalse(const std::string& value)
+{
+	return std::unique_ptr<IComponent>(new False(value));
 }
 
 }

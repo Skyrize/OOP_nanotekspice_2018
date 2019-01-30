@@ -7,63 +7,68 @@
 
 #include "NanoError.hpp"
 
-NanoError::NanoError(const std::string& message)
+nts::NanoError::NanoError(const std::string& message)
 : _message(message)
 {
 }
 
-NanoError::~NanoError()
+nts::NanoError::~NanoError()
 {
 	// TODO Auto-generated destructor stub
 }
 
-CircuitFileError::CircuitFileError(const std::string& message)
+nts::CircuitFileError::CircuitFileError(const std::string& message)
 : NanoError(message)
 {
 }
 
-ComponentTypeError::ComponentTypeError(const std::string& message)
+nts::ComponentTypeError::ComponentTypeError(const std::string& message)
 : NanoError(message)
 {
 }
 
-ComponentNameError::ComponentNameError(const std::string& message)
+nts::ComponentNameError::ComponentNameError(const std::string& message)
 : NanoError(message)
 {
 }
 
-UnexistingPinError::UnexistingPinError(const std::string& message)
+nts::UnexistingPinError::UnexistingPinError(const std::string& message)
 : NanoError(message)
 {
 }
 
-RedefinedComponentError::RedefinedComponentError(const std::string& message)
+nts::RedefinedComponentError::RedefinedComponentError(const std::string& message)
 : NanoError(message)
 {
 }
 
-UnlinkedOutputError::UnlinkedOutputError(const std::string& message)
+nts::UnlinkedOutputError::UnlinkedOutputError(const std::string& message)
 : NanoError(message)
 {
 }
 
-UnprovidedInputError::UnprovidedInputError(const std::string& message)
+nts::UnprovidedInputError::UnprovidedInputError(const std::string& message)
 : NanoError(message)
 {
 }
 
-UnknowInputError::UnknowInputError(const std::string& message)
+nts::UnknowInputError::UnknowInputError(const std::string& message)
 : NanoError(message)
 {
 }
 
-MissingChipsetSectionError::MissingChipsetSectionError(
+nts::MissingChipsetSectionError::MissingChipsetSectionError(
 		const std::string& message)
 : NanoError(message)
 {
 }
 
-MissingLinksSectionError::MissingLinksSectionError(const std::string& message)
+nts::MissingLinksSectionError::MissingLinksSectionError(const std::string& message)
+: NanoError(message)
+{
+}
+
+nts::UsageError::UsageError(const std::string& message)
 : NanoError(message)
 {
 }

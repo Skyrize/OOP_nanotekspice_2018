@@ -24,9 +24,10 @@ class Component: public IComponent {
         virtual nts::Tristate compute(size_t pin = 1);
         virtual void setLink(size_t pin, nts::IComponent &other, size_t otherPin);
         virtual void dump() const;
-        virtual class Pin *getPin(size_t pin) const;
+        virtual class Pin *getPin(const size_t &pin);
 
-		const std::string& getName() const
+
+		std::string getName() const
 		{
 			return name;
 		}

@@ -7,6 +7,7 @@
 
 #include "Circuit.hpp"
 #include "Pin.hpp"
+#include "NanoError.hpp"
 
 nts::Circuit::Circuit()
 {
@@ -14,23 +15,39 @@ nts::Circuit::Circuit()
 
 void nts::Circuit::pushComponent(IComponent *component)
 {
+	for (auto e : _components) {
+		if (e->getName() == component->getName()) {
+			throw RedefinedComponentError("Several components share the same name : \'" + component->getName() + "\'");
+		}
+	}
+
     _components.push_back(component);
 }
 
 void nts::Circuit::pushInput(IComponent *input)
 {
+	for (auto e : _inputs) {
+		if (e->getName() == input->getName()) {
+			throw RedefinedComponentError("Several components share the same name : \'" + input->getName() + "\'");
+		}
+	}
     _inputs.push_back(input);
 }
 
 void nts::Circuit::pushOutput(IComponent *output)
 {
+	for (auto e : _outputs) {
+		if (e->getName() == output->getName()) {
+			throw RedefinedComponentError("Several components share the same name : \'" + output->getName() + "\'");
+		}
+	}
     _outputs.push_back(output);
 }
 
 void nts::Circuit::display() const
 {
     for (auto i : _outputs) {
-        std::cout << i->getName() << "=" << i->getPin(0).getState() << std::endl;
+        std::cout << i->getName() << "=" << i->getPin(0)->getState() << std::endl;
     }
 }
 
@@ -38,7 +55,7 @@ void nts::Circuit::setInputValue(const std::string &name, size_t value)
 {
     for (auto i : _inputs) {
         if (name == i->getName()) {
-            i->getPin(0).setState((Tristate)value);
+            i->getPin(0)->setState((Tristate)value);
         }
     }
 }

@@ -6,11 +6,18 @@
 */
 
 #include "nts.hpp"
+#include "Parser.hpp"
+#include "NanoError.hpp"
 
 int main(int ac, char **av)
 {
-	(void)av;
     if (ac == 1)
-        return 84;
+    	throw nts::UsageError();
+
+	nts::Parser parser(av[1]);
+	parser.processParsing();
+
+
+
     return 0;
 }

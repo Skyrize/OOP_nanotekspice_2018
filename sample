@@ -1,8 +1,8 @@
 #three  inputs  and  gate
 .chipsets:
-input    i0
+input    
 input    i1
-input    i2
+input    i2(test)
 4081     and0
 output   out
 
