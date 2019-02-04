@@ -5,20 +5,15 @@
  ** Parser.cpp
  */
 
-#include <map>
-#include <algorithm>
 #include <sstream>
+#include <iostream>     // std::cout
+#include <algorithm>
 #include <iterator>
+#include <memory>
 #include "Parser.hpp"
+#include "Factory.hpp"
 
 namespace nts {
-
-using ComponentPusher = void (Circuit::*)(IComponent *component);
-
-static const std::map<std::string, ComponentPusher> pushersPointers = {
-		{"input", &Circuit::pushInput},
-		{"output", &Circuit::pushOutput},
-};
 
 Parser::Parser(const std::string& fileName)
 {
@@ -42,17 +37,13 @@ void Parser::skipCommentsAndEmptyLines(std::string &line)
 	}
 }
 
-std::vector<std::string> Parser::getLineContent(std::string &line)
+std::vector<std::string> Parser::getLineContent(std::string &line, const char &delimiter)
 {
-	std::replace(line.begin(), line.end(), '\t', ' ');
-	std::replace(line.begin(), line.end(), '(', ' ');
-	std::replace(line.begin(), line.end(), ')', ' ');
-
 	std::istringstream iss(line);
 	std::vector<std::string> tokens;
 	std::string token;
 
-	while (std::getline(iss, token, ' '))
+	while (std::getline(iss, token, delimiter))
 	{
 		if (token.empty() == false)
 			tokens.push_back(token);
@@ -60,18 +51,76 @@ std::vector<std::string> Parser::getLineContent(std::string &line)
 	return tokens;
 }
 
+size_t Parser::getComponentPin(const std::string &component)
+{
+	std::istringstream iss(component);
+	std::vector<std::string> tokens;
+	std::string token;
+
+	while (std::getline(iss, token, ':'))
+	{
+		if (token.empty() == false)
+			tokens.push_back(token);
+	}
+	if (tokens.size() != 2)
+		throw CircuitFileError("Linkage error. Usage: \'componentX:pinX \'componentY:pinY\'");
+	return std::stoi(tokens[1]);
+}
+
+void Parser::parseLink(std::string &line, Circuit *circuit)
+{
+	std::replace(line.begin(), line.end(), '\t', ' ');
+	std::vector<std::string> lineContent = getLineContent(line, ' ');
+
+	if (lineContent.size() != 2)
+		throw CircuitFileError("Linkage error. Usage: \'componentX:pinX \'componentY:pinY\'");
+
+	std::vector<std::string> linkContent01 = getLineContent(lineContent[0], ':');
+	std::vector<std::string> linkContent02 = getLineContent(lineContent[1], ':');
+	IComponent *link01 = components[linkContent01[0]];
+	IComponent *link02 = components[linkContent02[0]];
+
+	if (!link01 || !link02)
+		throw ComponentNameError();
+
+	size_t pin1 = getComponentPin(lineContent[0]);
+	size_t pin2 = getComponentPin(lineContent[1]);
+	link01->setLink(pin1, *link02, pin2);
+}
+
 void Parser::performLinksParsing(Circuit *circuit)
 {
+	std::string line;
+
+	while (std::getline(ntsFile, line)) {
+		std::replace(line.begin(), line.end(), '\t', ' ');
+		if (line.empty() || line.at(0) == '#') {
+			continue;
+		}
+
+		parseLink(line, circuit);
+	}
 }
 
 void Parser::parseComponent(std::string &line, Circuit *circuit)
 {
-	std::vector<std::string> lineContent = getLineContent(line);
+	std::replace(line.begin(), line.end(), '\t', ' ');
+	std::vector<std::string> lineContent = getLineContent(line, ' ');
+	IComponent * newComponent;
 
 	if (lineContent.size() == 1)
 		throw CircuitFileError("Component \'" + lineContent[0] + "\' must be provided with a name.");
 
-	std::cout << "--------TODO: " << "load component by type in Parser::parseComponent" << std::endl;
+	newComponent = Factory::createComponent(lineContent[0], lineContent[1]);
+
+	if (lineContent[0] == "input") {
+		circuit->pushInput(newComponent);
+	} else if (lineContent[0] == "output") {
+		circuit->pushOutput(newComponent);
+	} else {
+		circuit->pushComponent(newComponent);
+	}
+	this->components[lineContent[0]] = newComponent;
 }
 
 void Parser::performChipsetParsing(Circuit *circuit)
@@ -93,7 +142,6 @@ void Parser::performChipsetParsing(Circuit *circuit)
 			throw MissingLinksSectionError();
 
 	}
-	performLinksParsing(circuit);
 }
 
 Circuit* Parser::processParsing()
@@ -108,6 +156,7 @@ Circuit* Parser::processParsing()
 		throw MissingChipsetSectionError("Expected \".chipsets:\" section but got \"" + line + "\"");
 	} else {
 		performChipsetParsing(circuit);
+		performLinksParsing(circuit);
 	}
 	return circuit;
 }

@@ -9,7 +9,7 @@
 
 namespace nts {
 
-Input::Input(const std::string &name)
+Input::Input(const std::string &name, Tristate value)
 : Component(name)
 {
 	// TODO Auto-generated constructor stub

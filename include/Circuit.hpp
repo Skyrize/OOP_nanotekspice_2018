@@ -8,6 +8,7 @@
 #ifndef CIRCUIT_HPP_
 #define CIRCUIT_HPP_
 
+#include <memory>
 #include "nts.hpp"
 
 namespace nts {

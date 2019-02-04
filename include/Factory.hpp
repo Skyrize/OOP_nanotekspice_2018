@@ -13,28 +13,30 @@
 namespace nts {
 
 	namespace Factory {
-		std::unique_ptr<IComponent> createComponent(std::string &type, const std::string &value);
+		IComponent *createComponent(std::string &type, const std::string &value);
 
-		std::unique_ptr<IComponent> create2716(const std::string &value);
-		std::unique_ptr<IComponent> create4001(const std::string &value);
-		std::unique_ptr<IComponent> create4008(const std::string &value);
-		std::unique_ptr<IComponent> create4011(const std::string &value);
-		std::unique_ptr<IComponent> create4013(const std::string &value);
-		std::unique_ptr<IComponent> create4017(const std::string &value);
-		std::unique_ptr<IComponent> create4030(const std::string &value);
-		std::unique_ptr<IComponent> create4040(const std::string &value);
-		std::unique_ptr<IComponent> create4069(const std::string &value);
-		std::unique_ptr<IComponent> create4071(const std::string &value);
-		std::unique_ptr<IComponent> create4081(const std::string &value);
-		std::unique_ptr<IComponent> create4094(const std::string &value);
-		std::unique_ptr<IComponent> create4514(const std::string &value);
-		std::unique_ptr<IComponent> create4801(const std::string &value);
+		IComponent *create2716(const std::string &value);
+		IComponent *create4001(const std::string &value);
+		IComponent *create4008(const std::string &value);
+		IComponent *create4011(const std::string &value);
+		IComponent *create4013(const std::string &value);
+		IComponent *create4017(const std::string &value);
+		IComponent *create4030(const std::string &value);
+		IComponent *create4040(const std::string &value);
+		IComponent *create4069(const std::string &value);
+		IComponent *create4071(const std::string &value);
+		IComponent *create4081(const std::string &value);
+		IComponent *create4094(const std::string &value);
+		IComponent *create4514(const std::string &value);
+		IComponent *create4801(const std::string &value);
 
-		std::unique_ptr<IComponent> createInput(const std::string &value);
-		std::unique_ptr<IComponent> createOutput(const std::string &value);
-		std::unique_ptr<IComponent> createClock(const std::string &value);
-		std::unique_ptr<IComponent> createTrue(const std::string &value);
-		std::unique_ptr<IComponent> createFalse(const std::string &value);
+		std::vector<std::string> getDefaultValue(const std::string &value);
+
+		IComponent *createInput(const std::string &value);
+		IComponent *createOutput(const std::string &value);
+		IComponent *createClock(const std::string &value);
+		IComponent *createTrue(const std::string &value);
+		IComponent *createFalse(const std::string &value);
 	}
 }
 

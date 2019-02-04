@@ -9,8 +9,8 @@
 
 namespace nts {
 
-Clock::Clock(const std::string &name)
-: Input(name)
+Clock::Clock(const std::string &name, Tristate value)
+: Input(name, value)
 {
 	// TODO Auto-generated constructor stub
 

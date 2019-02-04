@@ -7,6 +7,8 @@
 
 #include <map>
 #include <memory>
+#include <algorithm>
+#include <sstream>
 #include "NanoError.hpp"
 #include "Factory.hpp"
 #include "Component2716.hpp"
@@ -32,7 +34,7 @@
 namespace nts {
 namespace Factory {
 
-using methodPtr = std::unique_ptr<IComponent> (*)(const std::string &value);
+using methodPtr = IComponent * (*)(const std::string &value);
 
 static std::map<const std::string, methodPtr> methodPointers = {
 		{"2716", &create2716},
@@ -56,112 +58,157 @@ static std::map<const std::string, methodPtr> methodPointers = {
 		{"true", &createTrue}
 };
 
-std::unique_ptr<IComponent> createComponent(const std::string &type, std::string &value)
+std::vector<std::string> getDefaultValue(const std::string &line)
+{
+	std::string value(line);
+	std::replace(value.begin(), value.end(), '(', ' ');
+	std::replace(value.begin(), value.end(), ')', ' ');
+
+	std::istringstream iss(value);
+	std::vector<std::string> tokens;
+	std::string token;
+
+	while (std::getline(iss, token, ' '))
+	{
+		if (token.empty() == false)
+			tokens.push_back(token);
+	}
+	return tokens;
+}
+
+IComponent * createComponent(const std::string &type, std::string &value)
 {
 	if (!methodPointers[type]) {
 		throw ComponentTypeError();
 	}
-	return (methodPointers[type](value));
+	return methodPointers[type](value);
 }
 
-std::unique_ptr<IComponent> create2716(const std::string &value)
+IComponent * create2716(const std::string &value)
 {
-	return std::unique_ptr<IComponent>(new Component2716(value));
+	std::vector<std::string> values = getDefaultValue(value);
+
+	if (values.size() == 2) {
+		return new Component2716(values[0], values[1]);
+	}
+	return new Component2716(value);
 }
 
-std::unique_ptr<IComponent> create4001(const std::string &value)
+IComponent * create4001(const std::string &value)
 {
-	return std::unique_ptr<IComponent>(new Component4001(value));
+	return new Component4001(value);
 }
 
-std::unique_ptr<IComponent> create4008(const std::string &value)
+IComponent * create4008(const std::string &value)
 {
-	return std::unique_ptr<IComponent>(new Component4008(value));
+	return new Component4008(value);
 }
 
-std::unique_ptr<IComponent> create4011(const std::string &value)
+IComponent * create4011(const std::string &value)
 {
-	return std::unique_ptr<IComponent>(new Component4011(value));
+	return new Component4011(value);
 }
 
-std::unique_ptr<IComponent> create4013(const std::string &value)
+IComponent * create4013(const std::string &value)
 {
-	return std::unique_ptr<IComponent>(new Component4013(value));
+	return new Component4013(value);
 }
 
-std::unique_ptr<IComponent> create4017(const std::string &value)
+IComponent * create4017(const std::string &value)
 {
-	return std::unique_ptr<IComponent>(new Component4017(value));
+	return new Component4017(value);
 }
 
-std::unique_ptr<IComponent> create4030(const std::string &value)
+IComponent * create4030(const std::string &value)
 {
-	return std::unique_ptr<IComponent>(new Component4030(value));
+	return new Component4030(value);
 }
 
-std::unique_ptr<IComponent> create4040(const std::string &value)
+IComponent * create4040(const std::string &value)
 {
-	return std::unique_ptr<IComponent>(new Component4040(value));
+	return new Component4040(value);
 }
 
-std::unique_ptr<IComponent> create4069(const std::string &value)
+IComponent * create4069(const std::string &value)
 {
-	return std::unique_ptr<IComponent>(new Component4069(value));
+	return new Component4069(value);
 }
 
-std::unique_ptr<IComponent> create4071(const std::string &value)
+IComponent * create4071(const std::string &value)
 {
-	return std::unique_ptr<IComponent>(new Component4071(value));
+	return new Component4071(value);
 }
 
-std::unique_ptr<IComponent> create4081(const std::string &value)
+IComponent * create4081(const std::string &value)
 {
-	return std::unique_ptr<IComponent>(new Component4081(value));
+	return new Component4081(value);
 }
 
-std::unique_ptr<IComponent> create4094(const std::string &value)
+IComponent * create4094(const std::string &value)
 {
-	return std::unique_ptr<IComponent>(new Component4094(value));
+	return new Component4094(value);
 }
 
-std::unique_ptr<IComponent> create4514(const std::string &value)
+IComponent * create4514(const std::string &value)
 {
-	return std::unique_ptr<IComponent>(new Component4514(value));
+	return new Component4514(value);
 }
 
-std::unique_ptr<IComponent> createComponent(std::string& type,
+IComponent * createComponent(std::string& type,
 		const std::string& value)
 {
 }
 
-std::unique_ptr<IComponent> create4801(const std::string &value)
+IComponent * create4801(const std::string &value)
 {
-	return std::unique_ptr<IComponent>(new Component4801(value));
+	return new Component4801(value);
 }
 
-std::unique_ptr<IComponent> createInput(const std::string& value)
+IComponent * createInput(const std::string& value)
 {
-	return std::unique_ptr<IComponent>(new Input(value));
+	std::vector<std::string> values = getDefaultValue(value);
+
+	if (values.size() == 2) {
+		if (std::stoi(values[1]) == Tristate::FALSE) {
+			return new Input(value, Tristate::FALSE);
+		} else if (std::stoi(values[1]) == Tristate::TRUE) {
+			return new Input(value, Tristate::TRUE);
+		} else {
+			throw CircuitFileError("Default value for Input \"" + values[0] + "\" should be 1 or 0. (got \'" + values[1] + "\'");
+		}
+	}
+	return new Input(value);
 }
 
-std::unique_ptr<IComponent> createOutput(const std::string& value)
+IComponent * createOutput(const std::string& value)
 {
-	return std::unique_ptr<IComponent>(new Output(value));
+	return new Output(value);
 }
 
-std::unique_ptr<IComponent> createClock(const std::string& value)
+IComponent * createClock(const std::string& value)
 {
-	return std::unique_ptr<IComponent>(new Clock(value));
+	std::vector<std::string> values = getDefaultValue(value);
+
+	if (values.size() == 2) {
+		if (std::stoi(values[1]) == Tristate::FALSE) {
+			return new Clock(value, Tristate::FALSE);
+		} else if (std::stoi(values[1]) == Tristate::TRUE) {
+			return new Clock(value, Tristate::TRUE);
+		} else {
+			throw CircuitFileError("Default value for Clock \"" + values[0] + "\" should be 1 or 0. (got \'" + values[1] + "\'");
+		}
+	}
+	return new Clock(value);
 }
 
-std::unique_ptr<IComponent> createTrue(const std::string& value)
+IComponent * createTrue(const std::string& value)
 {
-	return std::unique_ptr<IComponent>(new True(value));
+	return new True(value);
 }
 
-std::unique_ptr<IComponent> createFalse(const std::string& value)
+IComponent * createFalse(const std::string& value)
 {
-	return std::unique_ptr<IComponent>(new False(value));
+	return new False(value);
 }
 
 }

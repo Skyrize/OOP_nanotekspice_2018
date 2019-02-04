@@ -15,6 +15,7 @@ namespace nts {
 class Component2716: public Component {
 	public:
 		Component2716(const std::string& name);
+		Component2716(const std::string& name, const std::string &fileName);
 		virtual ~Component2716();
 };
 

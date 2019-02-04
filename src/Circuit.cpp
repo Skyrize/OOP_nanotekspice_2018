@@ -15,7 +15,7 @@ nts::Circuit::Circuit()
 
 void nts::Circuit::pushComponent(IComponent *component)
 {
-	for (auto e : _components) {
+	for (auto &e : _components) {
 		if (e->getName() == component->getName()) {
 			throw RedefinedComponentError("Several components share the same name : \'" + component->getName() + "\'");
 		}
@@ -26,7 +26,7 @@ void nts::Circuit::pushComponent(IComponent *component)
 
 void nts::Circuit::pushInput(IComponent *input)
 {
-	for (auto e : _inputs) {
+	for (auto &e : _inputs) {
 		if (e->getName() == input->getName()) {
 			throw RedefinedComponentError("Several components share the same name : \'" + input->getName() + "\'");
 		}
@@ -36,7 +36,7 @@ void nts::Circuit::pushInput(IComponent *input)
 
 void nts::Circuit::pushOutput(IComponent *output)
 {
-	for (auto e : _outputs) {
+	for (auto &e : _outputs) {
 		if (e->getName() == output->getName()) {
 			throw RedefinedComponentError("Several components share the same name : \'" + output->getName() + "\'");
 		}
@@ -46,14 +46,14 @@ void nts::Circuit::pushOutput(IComponent *output)
 
 void nts::Circuit::display() const
 {
-    for (auto i : _outputs) {
+    for (auto &i : _outputs) {
         std::cout << i->getName() << "=" << i->getPin(0)->getState() << std::endl;
     }
 }
 
 void nts::Circuit::setInputValue(const std::string &name, size_t value)
 {
-    for (auto i : _inputs) {
+    for (auto &i : _inputs) {
         if (name == i->getName()) {
             i->getPin(0)->setState((Tristate)value);
         }
@@ -62,7 +62,7 @@ void nts::Circuit::setInputValue(const std::string &name, size_t value)
 
 void nts::Circuit::run()
 {
-    for (auto i : _outputs) {
+    for (auto &i : _outputs) {
         i->compute();
     }
 }
@@ -75,6 +75,6 @@ void nts::Circuit::loop()
 
 void nts::Circuit::dump() const
 {
-    for (auto i : _components)
+    for (auto &i : _components)
         i->dump();
 }

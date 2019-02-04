@@ -14,7 +14,7 @@ namespace nts {
 
 class Clock: public Input {
 	public:
-		Clock(const std::string &name);
+		Clock(const std::string &name, Tristate value = Tristate::UNDEFINED);
 		virtual ~Clock();
 };
 
