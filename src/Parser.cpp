@@ -6,7 +6,7 @@
  */
 
 #include <sstream>
-#include <iostream>     // std::cout
+#include <iostream>
 #include <algorithm>
 #include <iterator>
 #include <memory>
@@ -117,6 +117,7 @@ void Parser::parseComponent(std::string &line, Circuit *circuit)
 		throw CircuitFileError("Component \'" + lineContent[0] + "\' must be provided with a name.");
 
 	std::unique_ptr<IComponent> newComponent(std::move(Factory::createComponent(lineContent[0], lineContent[1])));
+	IComponent *elem = newComponent.get();
 
 	if (lineContent[0] == "input") {
 		circuit->pushInput(newComponent);
@@ -125,7 +126,14 @@ void Parser::parseComponent(std::string &line, Circuit *circuit)
 	} else {
 		circuit->pushComponent(newComponent);
 	}
-	this->components[lineContent[0]] = newComponent.get();
+	if (this->components[lineContent[1]])
+		throw RedefinedComponentError();
+
+	if (lineContent[1].find('(') == std::string::npos) {
+		this->components[lineContent[1]] = elem;
+	} else {
+		this->components[lineContent[1].substr(0, lineContent[1].find('('))] = elem;
+	}
 }
 
 void Parser::performChipsetParsing(Circuit *circuit)
