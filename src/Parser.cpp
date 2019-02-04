@@ -106,12 +106,11 @@ void Parser::parseComponent(std::string &line, Circuit *circuit)
 {
 	std::replace(line.begin(), line.end(), '\t', ' ');
 	std::vector<std::string> lineContent = getLineContent(line, ' ');
-	IComponent * newComponent;
 
 	if (lineContent.size() == 1)
 		throw CircuitFileError("Component \'" + lineContent[0] + "\' must be provided with a name.");
 
-	newComponent = Factory::createComponent(lineContent[0], lineContent[1]);
+	std::unique_ptr<IComponent> newComponent = std::move(Factory::createComponent(lineContent[0], lineContent[1]));
 
 	if (lineContent[0] == "input") {
 		circuit->pushInput(newComponent);
@@ -120,7 +119,7 @@ void Parser::parseComponent(std::string &line, Circuit *circuit)
 	} else {
 		circuit->pushComponent(newComponent);
 	}
-	this->components[lineContent[0]] = newComponent;
+	this->components[lineContent[0]] = newComponent.get();
 }
 
 void Parser::performChipsetParsing(Circuit *circuit)

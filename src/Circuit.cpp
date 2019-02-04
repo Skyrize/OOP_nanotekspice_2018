@@ -13,7 +13,7 @@ nts::Circuit::Circuit()
 {
 }
 
-void nts::Circuit::pushComponent(IComponent *component)
+void nts::Circuit::pushComponent(std::unique_ptr<IComponent> &component)
 {
 	for (auto &e : _components) {
 		if (e->getName() == component->getName()) {
@@ -21,27 +21,27 @@ void nts::Circuit::pushComponent(IComponent *component)
 		}
 	}
 
-    _components.push_back(component);
+    _components.push_back(std::move(component));
 }
 
-void nts::Circuit::pushInput(IComponent *input)
+void nts::Circuit::pushInput(std::unique_ptr<IComponent> &input)
 {
 	for (auto &e : _inputs) {
 		if (e->getName() == input->getName()) {
 			throw RedefinedComponentError("Several components share the same name : \'" + input->getName() + "\'");
 		}
 	}
-    _inputs.push_back(input);
+    _inputs.push_back(std::move(input));
 }
 
-void nts::Circuit::pushOutput(IComponent *output)
+void nts::Circuit::pushOutput(std::unique_ptr<IComponent> &output)
 {
 	for (auto &e : _outputs) {
 		if (e->getName() == output->getName()) {
 			throw RedefinedComponentError("Several components share the same name : \'" + output->getName() + "\'");
 		}
 	}
-    _outputs.push_back(output);
+    _outputs.push_back(std::move(output));
 }
 
 void nts::Circuit::display() const

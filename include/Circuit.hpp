@@ -21,14 +21,14 @@ namespace nts {
             void run();
             void loop();
             void dump() const;
-            void pushComponent(IComponent *component);
-            void pushInput(IComponent *component);
-            void pushOutput(IComponent *component);
+            void pushComponent(std::unique_ptr<IComponent> &component);
+            void pushInput(std::unique_ptr<IComponent> &component);
+            void pushOutput(std::unique_ptr<IComponent> &component);
 
         private:
-            std::vector<IComponent *> _components;
-            std::vector<IComponent *> _inputs;
-            std::vector<IComponent *> _outputs;
+            std::vector<std::unique_ptr<IComponent> > _components;
+            std::vector<std::unique_ptr<IComponent> > _inputs;
+            std::vector<std::unique_ptr<IComponent> > _outputs;
             
     };
 }

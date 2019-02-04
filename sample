@@ -1,6 +1,6 @@
 #three  inputs  and  gate
 .chipsets:
-input    
+input    i0
 input    i1
 input    i2(test)
 4081     and0

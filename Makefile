@@ -42,9 +42,9 @@ OBJS	=	$(SRC:.cpp=.o)
 
 NAME	=	nanotekspice
 
-CXXFLAGS	=	 -Wall -Wextra -Werror -g
+CXXFLAGS	=	 -Wall -Wextra -Werror
 
-CC	=	g++ -I./include/ -I./include/component/chipset/ -I./include/component/special/ --std=c++11
+CC	=	g++ -I./include/ -I./include/component/chipset/ -I./include/component/special/ --std=c++11 -g
 
 _END=$'\x1b[0m'
 _RED=$'\x1b[31m'
