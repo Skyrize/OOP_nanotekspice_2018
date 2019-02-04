@@ -56,6 +56,7 @@ size_t Parser::getComponentPin(const std::string &component)
 	std::istringstream iss(component);
 	std::vector<std::string> tokens;
 	std::string token;
+	int value = 0;
 
 	while (std::getline(iss, token, ':'))
 	{
@@ -64,7 +65,12 @@ size_t Parser::getComponentPin(const std::string &component)
 	}
 	if (tokens.size() != 2)
 		throw CircuitFileError("Linkage error. Usage: \'componentX:pinX \'componentY:pinY\'");
-	return std::stoi(tokens[1]);
+	try {
+		value = std::stoi(tokens[1]);
+	} catch (std::exception &e) {
+		throw CircuitFileError("Pin error: value ins't a number for pin \'" + tokens[0] + "\'");
+	}
+	return value;
 }
 
 void Parser::parseLink(std::string &line, Circuit *circuit)
@@ -110,7 +116,7 @@ void Parser::parseComponent(std::string &line, Circuit *circuit)
 	if (lineContent.size() == 1)
 		throw CircuitFileError("Component \'" + lineContent[0] + "\' must be provided with a name.");
 
-	std::unique_ptr<IComponent> newComponent = std::move(Factory::createComponent(lineContent[0], lineContent[1]));
+	std::unique_ptr<IComponent> newComponent(std::move(Factory::createComponent(lineContent[0], lineContent[1])));
 
 	if (lineContent[0] == "input") {
 		circuit->pushInput(newComponent);

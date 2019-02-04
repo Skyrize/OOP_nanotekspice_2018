@@ -13,7 +13,7 @@
 namespace nts {
 
 	namespace Factory {
-		std::unique_ptr<IComponent> createComponent(std::string &type, const std::string &value);
+		std::unique_ptr<IComponent> createComponent(const std::string &type, const std::string &value);
 
 		std::unique_ptr<IComponent> create2716(const std::string &value);
 		std::unique_ptr<IComponent> create4001(const std::string &value);

@@ -76,7 +76,7 @@ std::vector<std::string> getDefaultValue(const std::string &line)
 	return tokens;
 }
 
-std::unique_ptr<IComponent> createComponent(const std::string &type, std::string &value)
+std::unique_ptr<IComponent> createComponent(const std::string &type, const std::string &value)
 {
 	if (!methodPointers[type]) {
 		throw ComponentTypeError();
@@ -154,11 +154,6 @@ std::unique_ptr<IComponent> create4514(const std::string &value)
 	return std::unique_ptr<IComponent>(new Component4514(value));
 }
 
-std::unique_ptr<IComponent> createComponent(std::string& type,
-		const std::string& value)
-{
-}
-
 std::unique_ptr<IComponent> create4801(const std::string &value)
 {
 	return std::unique_ptr<IComponent>(new Component4801(value));
@@ -167,12 +162,18 @@ std::unique_ptr<IComponent> create4801(const std::string &value)
 std::unique_ptr<IComponent> createInput(const std::string& value)
 {
 	std::vector<std::string> values = getDefaultValue(value);
+	int init = 0;
 
 	if (values.size() == 2) {
-		if (std::stoi(values[1]) == Tristate::FALSE) {
-			return std::unique_ptr<IComponent>(new Input(value, Tristate::FALSE));
-		} else if (std::stoi(values[1]) == Tristate::TRUE) {
-			return std::unique_ptr<IComponent>(new Input(value, Tristate::TRUE));
+		try {
+			init = std::stoi(values[1]);
+		} catch (std::exception &e) {
+			throw CircuitFileError("Input error: value ins't a number for input \'" + values[0] + "\'");
+		}
+		if (init == Tristate::FALSE) {
+			return std::unique_ptr<IComponent>(new Input(values[0], Tristate::FALSE));
+		} else if (init == Tristate::TRUE) {
+			return std::unique_ptr<IComponent>(new Input(values[0], Tristate::TRUE));
 		} else {
 			throw CircuitFileError("Default value for Input \"" + values[0] + "\" should be 1 or 0. (got \'" + values[1] + "\'");
 		}
@@ -188,12 +189,18 @@ std::unique_ptr<IComponent> createOutput(const std::string& value)
 std::unique_ptr<IComponent> createClock(const std::string& value)
 {
 	std::vector<std::string> values = getDefaultValue(value);
+	int init = 0;
 
 	if (values.size() == 2) {
-		if (std::stoi(values[1]) == Tristate::FALSE) {
-			return std::unique_ptr<IComponent>(new Clock(value, Tristate::FALSE));
-		} else if (std::stoi(values[1]) == Tristate::TRUE) {
-			return std::unique_ptr<IComponent>(new Clock(value, Tristate::TRUE));
+		try {
+			init = std::stoi(values[1]);
+		} catch (std::exception &e) {
+			throw CircuitFileError("Input error: value ins't a number for input \'" + values[0] + "\'");
+		}
+		if (init == Tristate::FALSE) {
+			return std::unique_ptr<IComponent>(new Clock(values[0], Tristate::FALSE));
+		} else if (init == Tristate::TRUE) {
+			return std::unique_ptr<IComponent>(new Clock(values[0], Tristate::TRUE));
 		} else {
 			throw CircuitFileError("Default value for Clock \"" + values[0] + "\" should be 1 or 0. (got \'" + values[1] + "\'");
 		}

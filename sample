@@ -2,7 +2,7 @@
 .chipsets:
 input    i0
 input    i1
-input    i2(test)
+input    i2(0)
 4081     and0
 output   out
 
