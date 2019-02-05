@@ -23,12 +23,15 @@ namespace nts {
 		private:
 			void performChipsetParsing(Circuit *circuit);
 			void performLinksParsing(Circuit *circuit);
+			void performArgumentsParsing(int nbArgs, char **arguments);
+
 
 			void skipCommentsAndEmptyLines(std::string &line);
 			std::vector<std::string> getLineContent(std::string &line, const char &delimiter);
 
 			void parseComponent(std::string &line, Circuit *circuit);
 			void parseLink(std::string &line, Circuit *circuit);
+			void parseArgument(std::string argument);
 
 			size_t getComponentPin(const std::string &component);
 
@@ -37,7 +40,7 @@ namespace nts {
 		public:
 				Parser(const std::string &fileName);
 				virtual ~Parser();
-				Circuit *processParsing();
+				Circuit *processParsing(int nbArgs, char **arguments);
 };
 
 } /* namespace nts */

@@ -12,6 +12,7 @@
 #include <memory>
 #include "Parser.hpp"
 #include "Factory.hpp"
+#include "Pin.hpp"
 
 namespace nts {
 
@@ -37,14 +38,14 @@ void Parser::skipCommentsAndEmptyLines(std::string &line)
 	}
 }
 
-std::vector<std::string> Parser::getLineContent(std::string &line, const char &delimiter)
+std::vector<std::string> Parser::getLineContent(std::string &line,
+		const char &delimiter)
 {
 	std::istringstream iss(line);
 	std::vector<std::string> tokens;
 	std::string token;
 
-	while (std::getline(iss, token, delimiter))
-	{
+	while (std::getline(iss, token, delimiter)) {
 		if (token.empty() == false)
 			tokens.push_back(token);
 	}
@@ -58,17 +59,19 @@ size_t Parser::getComponentPin(const std::string &component)
 	std::string token;
 	int value = 0;
 
-	while (std::getline(iss, token, ':'))
-	{
+	while (std::getline(iss, token, ':')) {
 		if (token.empty() == false)
 			tokens.push_back(token);
 	}
 	if (tokens.size() != 2)
-		throw CircuitFileError("Linkage error. Usage: \'componentX:pinX \'componentY:pinY\'");
+		throw CircuitFileError(
+				"Linkage error. Usage: \'componentX:pinX \'componentY:pinY\'");
 	try {
 		value = std::stoi(tokens[1]);
 	} catch (std::exception &e) {
-		throw CircuitFileError("Pin error: value ins't a number for pin \'" + tokens[0] + "\'");
+		throw CircuitFileError(
+				"Pin error: value ins't a number for pin \'" + tokens[0]
+						+ "\'");
 	}
 	return value;
 }
@@ -79,10 +82,13 @@ void Parser::parseLink(std::string &line, Circuit *circuit)
 	std::vector<std::string> lineContent = getLineContent(line, ' ');
 
 	if (lineContent.size() != 2)
-		throw CircuitFileError("Linkage error. Usage: \'componentX:pinX \'componentY:pinY\'");
+		throw CircuitFileError(
+				"Linkage error. Usage: \'componentX:pinX \'componentY:pinY\'");
 
-	std::vector<std::string> linkContent01 = getLineContent(lineContent[0], ':');
-	std::vector<std::string> linkContent02 = getLineContent(lineContent[1], ':');
+	std::vector<std::string> linkContent01 = getLineContent(lineContent[0],
+			':');
+	std::vector<std::string> linkContent02 = getLineContent(lineContent[1],
+			':');
 	IComponent *link01 = components[linkContent01[0]];
 	IComponent *link02 = components[linkContent02[0]];
 
@@ -114,9 +120,13 @@ void Parser::parseComponent(std::string &line, Circuit *circuit)
 	std::vector<std::string> lineContent = getLineContent(line, ' ');
 
 	if (lineContent.size() == 1)
-		throw CircuitFileError("Component \'" + lineContent[0] + "\' must be provided with a name.");
+		throw CircuitFileError(
+				"Component \'" + lineContent[0]
+						+ "\' must be provided with a name.");
 
-	std::unique_ptr<IComponent> newComponent(std::move(Factory::createComponent(lineContent[0], lineContent[1])));
+	std::unique_ptr<IComponent> newComponent(
+			std::move(
+					Factory::createComponent(lineContent[0], lineContent[1])));
 	IComponent *elem = newComponent.get();
 
 	if (lineContent[0] == "input") {
@@ -132,7 +142,8 @@ void Parser::parseComponent(std::string &line, Circuit *circuit)
 	if (lineContent[1].find('(') == std::string::npos) {
 		this->components[lineContent[1]] = elem;
 	} else {
-		this->components[lineContent[1].substr(0, lineContent[1].find('('))] = elem;
+		this->components[lineContent[1].substr(0, lineContent[1].find('('))] =
+				elem;
 	}
 }
 
@@ -157,19 +168,47 @@ void Parser::performChipsetParsing(Circuit *circuit)
 	}
 }
 
-Circuit* Parser::processParsing()
+void Parser::parseArgument(std::string argument)
+{
+	std::vector<std::string> lineContent;
+	lineContent = getLineContent(argument, '=');
+	if (!components[lineContent[0]])
+		throw UnknowInputError();
+	if (std::stoi(lineContent[1]) == Tristate::TRUE) {
+		components[lineContent[0]]->getPin(1)->setState(Tristate::TRUE);
+	} else if (std::stoi(lineContent[1]) == Tristate::FALSE) {
+		components[lineContent[0]]->getPin(1)->setState(Tristate::FALSE);
+	} else {
+		throw UnknowInputError(
+				"Tu pensais vraiment pouvoir init un input avec autre chose que 0 ou 1 ? tu me prends pour un amateur ?");
+	}
+
+}
+
+void Parser::performArgumentsParsing(int nbArgs, char** arguments)
+{
+
+	for (int i = 2; i < nbArgs; i++) {
+		parseArgument(std::string(arguments[i]));
+	}
+}
+
+Circuit* Parser::processParsing(int nbArgs, char **arguments)
 {
 	Circuit *circuit = new Circuit();
 	std::string line;
 
 	skipCommentsAndEmptyLines(line);
 	if (line.empty() == true)
-		throw CircuitFileError("Warning: file provided is empty of comment-only");
+		throw CircuitFileError(
+				"Warning: file provided is empty of comment-only");
 	if (line != ".chipsets:") {
-		throw MissingChipsetSectionError("Expected \".chipsets:\" section but got \"" + line + "\"");
+		throw MissingChipsetSectionError(
+				"Expected \".chipsets:\" section but got \"" + line + "\"");
 	} else {
 		performChipsetParsing(circuit);
 		performLinksParsing(circuit);
+		performArgumentsParsing(nbArgs, arguments);
 	}
 	return circuit;
 }

@@ -10,6 +10,7 @@ SRC	=	src/main.cpp								\
 		src/Factory.cpp								\
 		src/Circuit.cpp								\
 		src/Parser.cpp								\
+		src/Pin.cpp									\
 													\
 													\
 		src/component/chipset/Component.cpp			\
