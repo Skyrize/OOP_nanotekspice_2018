@@ -6,14 +6,14 @@
  */
 
 #include "Input.hpp"
+#include "Pin.hpp"
 
 namespace nts {
 
 Input::Input(const std::string &name, Tristate value)
 : Component(name)
 {
-	// TODO Auto-generated constructor stub
-
+	this->pins.push_back(new Pin(value));
 }
 
 Input::~Input()

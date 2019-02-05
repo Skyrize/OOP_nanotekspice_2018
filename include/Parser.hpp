@@ -35,7 +35,8 @@ namespace nts {
 
 			size_t getComponentPin(const std::string &component);
 
-
+			void verifyInputInitialisation();
+			void verifyOutputLinkage();
 
 		public:
 				Parser(const std::string &fileName);

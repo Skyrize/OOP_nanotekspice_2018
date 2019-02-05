@@ -6,6 +6,7 @@
  */
 
 #include "Component.hpp"
+#include "Pin.hpp"
 
 namespace nts {
 
@@ -22,9 +23,10 @@ nts::Tristate Component::compute(size_t pin)
 
 void Component::setLink(size_t pin, nts::IComponent& other, size_t otherPin)
 {
-	(void)pin;
-	(void)other;
-	(void)otherPin;
+	Pin *pin1 = this->getPin(pin);
+	Pin *pin2 = other.getPin(otherPin);
+
+	pin1->setLink(pin2);
 }
 
 void Component::dump() const
@@ -38,6 +40,8 @@ nts::Component::Component(const std::string& name)
 
 class Pin *nts::Component::getPin(const size_t& pin)
 {
-		return this->pins[pin];
+		if (this->pins.size() <= pin - 1)
+			throw UnexistingPinError("In component \'" + this->name + "\', requested pin " + std::to_string(pin) + " is out of bound.");
+		return this->pins[pin - 1];
 }
 }

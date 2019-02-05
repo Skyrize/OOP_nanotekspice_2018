@@ -9,6 +9,7 @@
 #define SRC_COMPONENT_CHIPSET_COMPONENT_HPP_
 
 #include "nts.hpp"
+#include "Pin.hpp"
 
 namespace nts {
 

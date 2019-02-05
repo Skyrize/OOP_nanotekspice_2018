@@ -12,8 +12,16 @@ namespace nts {
 Component4081::Component4081(const std::string& name)
 : Component(name)
 {
-	// TODO Auto-generated constructor stub
-
+	//todo do the real thing; this is for debug;
+	this->pins.push_back(new Pin());
+	this->pins.push_back(new Pin());
+	this->pins.push_back(new Pin());
+	this->pins.push_back(new Pin());
+	this->pins.push_back(new Pin());
+	this->pins.push_back(new Pin());
+	this->pins.push_back(new Pin());
+	this->pins.push_back(new Pin());
+	this->pins.push_back(new Pin());
 }
 
 Component4081::~Component4081()

@@ -12,8 +12,6 @@ namespace nts {
 True::True(const std::string &name)
 : Input(name, Tristate::TRUE)
 {
-	// TODO Auto-generated constructor stub
-
 }
 
 True::~True()

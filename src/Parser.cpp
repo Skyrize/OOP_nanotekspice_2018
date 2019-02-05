@@ -10,6 +10,8 @@
 #include <algorithm>
 #include <iterator>
 #include <memory>
+#include "Input.hpp"
+#include "Output.hpp"
 #include "Parser.hpp"
 #include "Factory.hpp"
 #include "Pin.hpp"
@@ -193,6 +195,32 @@ void Parser::performArgumentsParsing(int nbArgs, char** arguments)
 	}
 }
 
+void Parser::verifyInputInitialisation()
+{
+	Input *tmp = nullptr;
+
+	for (auto &e : components) {
+		tmp = dynamic_cast<Input *>(e.second);
+		if (tmp) {
+			if (tmp->getPin(1)->getState() == Tristate::UNDEFINED)
+				throw UnprovidedInputError("Input \'" + tmp->getName() + "\' value was not provided on the command line.");
+		}
+	}
+}
+
+void Parser::verifyOutputLinkage()
+{
+	Output *tmp = nullptr;
+
+	for (auto &e : components) {
+		tmp = dynamic_cast<Output *>(e.second);
+		if (tmp) {
+			if (tmp->getPin(1)->isLinked() == false)
+				throw UnlinkedOutputError();
+		}
+	}
+}
+
 Circuit* Parser::processParsing(int nbArgs, char **arguments)
 {
 	Circuit *circuit = new Circuit();
@@ -209,6 +237,8 @@ Circuit* Parser::processParsing(int nbArgs, char **arguments)
 		performChipsetParsing(circuit);
 		performLinksParsing(circuit);
 		performArgumentsParsing(nbArgs, arguments);
+		verifyInputInitialisation();
+		verifyOutputLinkage();
 	}
 	return circuit;
 }

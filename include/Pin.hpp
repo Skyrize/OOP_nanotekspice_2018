@@ -19,18 +19,20 @@ namespace nts {
                 INPUT,
                 OUTPUT
             } mode;
-            Pin();
+            Pin(Tristate state = UNDEFINED);
             virtual ~Pin();
             void setState(Tristate state);
-            void setLink(const class Pin &link);
+            void setLink(class Pin *link);
             Tristate getState(void);
             Pin *getLink(void);
             void operator=(const class Pin &pin);
+            bool isLinked(void);
         
         private:
             Tristate _state = UNDEFINED;
             class Pin *_link = nullptr;
             mode _mode = DEFAULT;
+            bool _isLinked = false;
 
     };
 }

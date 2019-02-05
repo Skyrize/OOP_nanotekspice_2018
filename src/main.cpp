@@ -14,7 +14,6 @@ int main(int ac, char **av)
 {
     if (ac == 1)
     	throw nts::UsageError();
-    nts::Pin prout;
 
 	nts::Parser parser(av[1]);
 	parser.processParsing(ac, av);

@@ -6,14 +6,14 @@
  */
 
 #include "Output.hpp"
+#include "Pin.hpp"
 
 namespace nts {
 
 Output::Output(const std::string &name)
 : Component(name)
 {
-	// TODO Auto-generated constructor stub
-
+	this->pins.push_back(new Pin());
 }
 
 Output::~Output()

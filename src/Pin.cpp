@@ -7,8 +7,9 @@
 
 #include "Pin.hpp"
 
-nts::Pin::Pin()
+nts::Pin::Pin(Tristate state)
 {
+	this->_state = state;
 }
 
 nts::Pin::~Pin()
@@ -20,9 +21,10 @@ void nts::Pin::setState(Tristate state)
 	_state = state;
 }
 
-void nts::Pin::setLink(const class Pin& link)
+void nts::Pin::setLink(class Pin *link)
 {
-	_link = link._link;
+	_link = link;
+	link->_isLinked = true;
 }
 
 nts::Tristate nts::Pin::getState(void)
@@ -42,6 +44,7 @@ void nts::Pin::operator =(const class Pin& pin)
 	this->_mode = pin._mode;
 }
 
-
-
-
+bool nts::Pin::isLinked(void)
+{
+	return this->_isLinked;
+}
