@@ -12,6 +12,7 @@ namespace nts {
 Component4081::Component4081(const std::string& name)
 : Component(name)
 {
+<<<<<<< HEAD
     Pin *pin = nullptr;
     Tristate (*input)() = []()->Tristate {};
     Tristate (*output)() = []()->Tristate {};
@@ -31,6 +32,18 @@ Component4081::Component4081(const std::string& name)
             // _pins[i - 1]
         }
     }
+=======
+	//todo do the real thing; this is for debug;
+	this->pins.push_back(new Pin());
+	this->pins.push_back(new Pin());
+	this->pins.push_back(new Pin());
+	this->pins.push_back(new Pin());
+	this->pins.push_back(new Pin());
+	this->pins.push_back(new Pin());
+	this->pins.push_back(new Pin());
+	this->pins.push_back(new Pin());
+	this->pins.push_back(new Pin());
+>>>>>>> b36423e1ce9fda4fdb9426f2f59e4c32e50bc284
 }
 
 Component4081::~Component4081()

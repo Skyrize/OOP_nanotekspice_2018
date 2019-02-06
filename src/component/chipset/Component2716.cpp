@@ -9,7 +9,7 @@
 
 namespace nts {
 
-Component2716::Component2716(const std::string& name)
+Component2716::Component2716(const std::string& name, const std::string &fileName)
 : Component(name)
 {
 	// TODO Auto-generated constructor stub
@@ -22,3 +22,8 @@ Component2716::~Component2716()
 }
 
 } /* namespace nts */
+
+nts::Component2716::Component2716(const std::string& name)
+: Component(name)
+{
+}

@@ -6,6 +6,7 @@
 */
 
 #include "nts.hpp"
+#include "Gates.hpp"
 
 nts::Tristate nts::Gates::AND(nts::Tristate state1, nts::Tristate state2)
 {

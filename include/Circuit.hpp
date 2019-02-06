@@ -8,6 +8,7 @@
 #ifndef CIRCUIT_HPP_
 #define CIRCUIT_HPP_
 
+#include <memory>
 #include "nts.hpp"
 
 namespace nts {
@@ -20,17 +21,17 @@ namespace nts {
             void run();
             void loop();
             void dump() const;
-            std::vector<IComponent *> getInputs() const { return _inputs; };
-            std::vector<IComponent *> getOutputs() const { return _outputs; };
-            std::vector<IComponent *> getComponents() const { return _components; };
-            void pushComponent(IComponent *component);
-            void pushInput(IComponent *component);
-            void pushOutput(IComponent *component);
+            std::vector<std::unique_ptr<IComponent> > getInputs() const { return _inputs; };
+            std::vector<std::unique_ptr<IComponent> > getOutputs() const { return _outputs; };
+            std::vector<std::unique_ptr<IComponent> > getComponents() const { return _components; };
+            void pushComponent(std::unique_ptr<IComponent> &component);
+            void pushInput(std::unique_ptr<IComponent> &component);
+            void pushOutput(std::unique_ptr<IComponent> &component);
 
         private:
-            std::vector<IComponent *> _components;
-            std::vector<IComponent *> _inputs;
-            std::vector<IComponent *> _outputs;
+            std::vector<std::unique_ptr<IComponent> > _components;
+            std::vector<std::unique_ptr<IComponent> > _inputs;
+            std::vector<std::unique_ptr<IComponent> > _outputs;
             
     };
 }

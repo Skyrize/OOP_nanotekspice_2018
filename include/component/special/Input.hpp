@@ -14,7 +14,7 @@ namespace nts {
 
 class Input: public Component {
 	public:
-		Input(const std::string &name);
+		Input(const std::string &name, Tristate value = Tristate::UNDEFINED);
 		virtual ~Input();
 };
 

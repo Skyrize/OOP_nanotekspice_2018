@@ -10,7 +10,7 @@
 namespace nts {
 
 False::False(const std::string &name)
-: Input(name)
+: Input(name, Tristate::FALSE)
 {
 	// TODO Auto-generated constructor stub
 

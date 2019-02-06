@@ -10,6 +10,7 @@
 #include "NanoError.hpp"
 #include "Circuit.hpp"
 #include "CommandLineInterpreter.hpp"
+#include "Pin.hpp"
 
 int main(int ac, char **av)
 {
@@ -18,8 +19,8 @@ int main(int ac, char **av)
 
     if (ac == 1)
     	throw nts::UsageError();
-	// nts::Parser parser(av[1]);
-	// circuit = parser.processParsing();
+    nts::Parser parser(av[1]);
+	circuit = parser.processParsing(ac, av);
     cli.start(circuit);
     return 0;
 }

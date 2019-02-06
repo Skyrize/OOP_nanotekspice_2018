@@ -7,6 +7,8 @@
 
 #include <map>
 #include <memory>
+#include <algorithm>
+#include <sstream>
 #include "NanoError.hpp"
 #include "Factory.hpp"
 #include "Component2716.hpp"
@@ -56,7 +58,25 @@ static std::map<const std::string, methodPtr> methodPointers = {
 		{"true", &createTrue}
 };
 
-std::unique_ptr<IComponent> createComponent(const std::string &type, std::string &value)
+std::vector<std::string> getDefaultValue(const std::string &line)
+{
+	std::string value(line);
+	std::replace(value.begin(), value.end(), '(', ' ');
+	std::replace(value.begin(), value.end(), ')', ' ');
+
+	std::istringstream iss(value);
+	std::vector<std::string> tokens;
+	std::string token;
+
+	while (std::getline(iss, token, ' '))
+	{
+		if (token.empty() == false)
+			tokens.push_back(token);
+	}
+	return tokens;
+}
+
+std::unique_ptr<IComponent> createComponent(const std::string &type, const std::string &value)
 {
 	if (!methodPointers[type]) {
 		throw ComponentTypeError();
@@ -66,6 +86,11 @@ std::unique_ptr<IComponent> createComponent(const std::string &type, std::string
 
 std::unique_ptr<IComponent> create2716(const std::string &value)
 {
+	std::vector<std::string> values = getDefaultValue(value);
+
+	if (values.size() == 2) {
+		return std::unique_ptr<IComponent>(new Component2716(values[0], values[1]));
+	}
 	return std::unique_ptr<IComponent>(new Component2716(value));
 }
 
@@ -129,11 +154,6 @@ std::unique_ptr<IComponent> create4514(const std::string &value)
 	return std::unique_ptr<IComponent>(new Component4514(value));
 }
 
-std::unique_ptr<IComponent> createComponent(std::string& type,
-		const std::string& value)
-{
-}
-
 std::unique_ptr<IComponent> create4801(const std::string &value)
 {
 	return std::unique_ptr<IComponent>(new Component4801(value));
@@ -141,6 +161,23 @@ std::unique_ptr<IComponent> create4801(const std::string &value)
 
 std::unique_ptr<IComponent> createInput(const std::string& value)
 {
+	std::vector<std::string> values = getDefaultValue(value);
+	int init = 0;
+
+	if (values.size() == 2) {
+		try {
+			init = std::stoi(values[1]);
+		} catch (std::exception &e) {
+			throw CircuitFileError("Input error: value ins't a number for input \'" + values[0] + "\'");
+		}
+		if (init == Tristate::FALSE) {
+			return std::unique_ptr<IComponent>(new Input(values[0], Tristate::FALSE));
+		} else if (init == Tristate::TRUE) {
+			return std::unique_ptr<IComponent>(new Input(values[0], Tristate::TRUE));
+		} else {
+			throw CircuitFileError("Default value for Input \"" + values[0] + "\" should be 1 or 0. (got \'" + values[1] + "\'");
+		}
+	}
 	return std::unique_ptr<IComponent>(new Input(value));
 }
 
@@ -151,6 +188,23 @@ std::unique_ptr<IComponent> createOutput(const std::string& value)
 
 std::unique_ptr<IComponent> createClock(const std::string& value)
 {
+	std::vector<std::string> values = getDefaultValue(value);
+	int init = 0;
+
+	if (values.size() == 2) {
+		try {
+			init = std::stoi(values[1]);
+		} catch (std::exception &e) {
+			throw CircuitFileError("Input error: value ins't a number for input \'" + values[0] + "\'");
+		}
+		if (init == Tristate::FALSE) {
+			return std::unique_ptr<IComponent>(new Clock(values[0], Tristate::FALSE));
+		} else if (init == Tristate::TRUE) {
+			return std::unique_ptr<IComponent>(new Clock(values[0], Tristate::TRUE));
+		} else {
+			throw CircuitFileError("Default value for Clock \"" + values[0] + "\" should be 1 or 0. (got \'" + values[1] + "\'");
+		}
+	}
 	return std::unique_ptr<IComponent>(new Clock(value));
 }
 

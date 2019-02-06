@@ -11,6 +11,7 @@ SRC	=	src/main.cpp								\
 		src/Circuit.cpp								\
 		src/Parser.cpp								\
 		src/CommandLineInterpreter.cpp				\
+		src/Pin.cpp									\
 													\
 													\
 		src/component/chipset/Component.cpp			\
@@ -45,7 +46,7 @@ NAME	=	nanotekspice
 
 CXXFLAGS	=	 -Wall -Wextra -Werror
 
-CC	=	g++ -g3 -I./include/ -I./include/component/chipset/ -I./include/component/special/ --std=c++11
+CC	=	g++ -I./include/ -I./include/component/chipset/ -I./include/component/special/ --std=c++11 -g
 
 _END=$'\x1b[0m'
 _RED=$'\x1b[31m'
