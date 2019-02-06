@@ -7,7 +7,7 @@
 
 #include "Pin.hpp"
 
-nts::Pin::Pin(mTristate compute, Tristate state = UNDEFINED)
+nts::Pin::Pin(mTristate compute, Tristate state)
 {
 	this->_state = state;
     this->_ptr = compute;
