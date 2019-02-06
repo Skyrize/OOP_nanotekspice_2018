@@ -9,9 +9,13 @@
 #define PIN_HPP_
 
 #include "nts.hpp"
+#include <functional>
+#include <utility>
+
 
 namespace nts {
 
+    using mTristate = std::function<Tristate()>;
     class Pin {
         public:
             typedef enum {
@@ -19,7 +23,7 @@ namespace nts {
                 INPUT,
                 OUTPUT
             } mode;
-            Pin(Tristate state = UNDEFINED);
+            Pin(mTristate compute, Tristate state = UNDEFINED);
             virtual ~Pin();
             void setState(Tristate state);
             void setLink(class Pin *link);
@@ -27,12 +31,14 @@ namespace nts {
             Pin *getLink(void);
             void operator=(const class Pin &pin);
             bool isLinked(void);
+            Tristate compute() { return _ptr(); };
         
         private:
             Tristate _state = UNDEFINED;
             class Pin *_link = nullptr;
             mode _mode = DEFAULT;
             bool _isLinked = false;
+            mTristate _ptr;
 
     };
 }

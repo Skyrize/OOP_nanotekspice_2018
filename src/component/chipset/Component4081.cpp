@@ -9,46 +9,44 @@
 
 namespace nts {
 
+    // TODO : 4013
+
 Component4081::Component4081(const std::string& name)
 : Component(name)
 {
-<<<<<<< HEAD
-    Pin *pin = nullptr;
-    Tristate (*input)() = []()->Tristate {};
-    Tristate (*output)() = []()->Tristate {};
-    Tristate (*def)() = []()->Tristate {};
+    std::vector<nts::Pin *> tab = _pins;
 
 	for (int i = 0; i <= 14; ++i) {
-        pin = new Pin();
         if (i == 3 || i == 4 || i == 10 || i == 11) {
-
-        } else {
-            output = []()->Tristate {
-
-            }
-            pin->setCompute([pin]()->Tristate {
-
+            _pins[i - 1] = new Pin([tab, i]()->Tristate
+            {
+                Tristate state1;
+                Tristate state2;
+            
+                if (i == 3 || i == 10) {
+                    state1 = tab[i - 2]->compute();
+                    state2 = tab[i - 3]->compute();
+                } else {
+                    state1 = tab[i + 2]->compute();
+                    state2 = tab[i + 3]->compute();
+                }
+                return Gates::AND(state1, state2);
             });
-            // _pins[i - 1]
+        } else {
+            _pins[i - 1] = new Pin([tab, i]()->Tristate
+            {
+                class Pin *pin = tab[i - 1]->getLink();
+
+                if (!pin)
+                    return (tab[i - 1]->getState());
+                return (pin->compute());
+            });
         }
     }
-=======
-	//todo do the real thing; this is for debug;
-	this->pins.push_back(new Pin());
-	this->pins.push_back(new Pin());
-	this->pins.push_back(new Pin());
-	this->pins.push_back(new Pin());
-	this->pins.push_back(new Pin());
-	this->pins.push_back(new Pin());
-	this->pins.push_back(new Pin());
-	this->pins.push_back(new Pin());
-	this->pins.push_back(new Pin());
->>>>>>> b36423e1ce9fda4fdb9426f2f59e4c32e50bc284
 }
 
 Component4081::~Component4081()
 {
-	// TODO Auto-generated destructor stub
 }
 
-} /* namespace nts */
+}

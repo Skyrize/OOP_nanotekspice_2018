@@ -10,6 +10,7 @@
 
 #include "nts.hpp"
 #include "Pin.hpp"
+#include "Gates.hpp"
 
 namespace nts {
 
