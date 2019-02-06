@@ -18,11 +18,6 @@ namespace nts {
     using mTristate = std::function<Tristate()>;
     class Pin {
         public:
-            typedef enum {
-                DEFAULT,
-                INPUT,
-                OUTPUT
-            } mode;
             Pin(mTristate compute, Tristate state = UNDEFINED);
             virtual ~Pin();
             void setState(Tristate state);
@@ -31,12 +26,11 @@ namespace nts {
             Pin *getLink(void);
             void operator=(const class Pin &pin);
             bool isLinked(void);
-            Tristate compute() { return _ptr(); };
-        
+            Tristate compute();
+
         private:
             Tristate _state = UNDEFINED;
             class Pin *_link = nullptr;
-            mode _mode = DEFAULT;
             bool _isLinked = false;
             mTristate _ptr;
 

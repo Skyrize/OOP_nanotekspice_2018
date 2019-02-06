@@ -13,7 +13,11 @@ namespace nts {
 Output::Output(const std::string &name)
 : Component(name)
 {
-	this->_pins.push_back(new Pin());
+    class Pin *self = this->_pins[0];
+
+	_pins[0] = new Pin([self]() -> Tristate {
+        return (self->getLink()->compute());
+    });
 }
 
 Output::~Output()
