@@ -82,6 +82,21 @@ void nts::Circuit::loop()
 
 void nts::Circuit::dump() const
 {
-    for (auto &i : _components)
+    std::cout << "Inputs:" << std::endl;
+    for (auto &i : _inputs) {
+        std::cout << std::endl;
         i->dump();
+    }
+    std::cout << std::endl;
+    std::cout << "Outputs:" << std::endl;
+    for (auto &i : _outputs) {
+        std::cout << std::endl;
+        i->dump();
+    }
+    std::cout << std::endl;
+    std::cout << "Components:" << std::endl;
+    for (auto &i : _components) {
+        std::cout << std::endl;
+        i->dump();
+    }
 }

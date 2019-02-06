@@ -32,6 +32,11 @@ void Component::setLink(size_t pin, nts::IComponent& other, size_t otherPin)
 
 void Component::dump() const
 {
+    size_t it = 1;
+
+    std::cout << "Component " << _name << ":" << std::endl;
+    for (auto &i: _pins)
+        std::cout << "Pin " << it++ << " = " << i->getState() << std::endl;
 }
 
 nts::Component::Component(const std::string& name)
