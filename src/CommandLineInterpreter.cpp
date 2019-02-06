@@ -48,14 +48,13 @@ void nts::CommandLineInterpreter::setInputValue(nts::Circuit *circuit) const
     std::string name;
     size_t value;
     size_t pos = 0;
-    std::vector<IComponent *> vec;
+    std::vector<std::unique_ptr<IComponent>> &vec = circuit->getInputs();
     bool inputFound = 0;
 
     pos = _cmd.find('=');
     name = _cmd.substr(0, pos);
-    vec = circuit->getInputs();
-    for (auto i : vec) {
-        if (!i->getName().compare(name))
+    for (auto &i : vec) {
+        if (!i.get()->getName().compare(name))
             inputFound = 1;
     }
     if (name.empty() || !inputFound) {

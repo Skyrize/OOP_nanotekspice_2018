@@ -7,6 +7,7 @@
 
 #include "Component.hpp"
 #include "Pin.hpp"
+#include "NanoError.hpp"
 
 namespace nts {
 

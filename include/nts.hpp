@@ -8,11 +8,8 @@
 #ifndef ICOMPONENT_HPP_
 #define ICOMPONENT_HPP_
 
-#include "NanoError.hpp"
 #include <iostream>
 #include <vector>
-#include <list>
-#include <memory>
 
 namespace nts {
     

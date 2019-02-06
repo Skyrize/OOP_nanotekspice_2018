@@ -13,7 +13,7 @@ namespace nts {
 Output::Output(const std::string &name)
 : Component(name)
 {
-	this->pins.push_back(new Pin());
+	this->_pins.push_back(new Pin());
 }
 
 Output::~Output()
