@@ -12,9 +12,10 @@ SRC	=	src/main.cpp								\
 		src/Parser.cpp								\
 		src/CommandLineInterpreter.cpp				\
 		src/Pin.cpp									\
+		src/Gates.cpp								\
 													\
 													\
-		src/component/Component.cpp			\
+		src/component/Component.cpp					\
 		src/component/chipset/Component2716.cpp		\
 		src/component/chipset/Component4001.cpp		\
 		src/component/chipset/Component4008.cpp		\

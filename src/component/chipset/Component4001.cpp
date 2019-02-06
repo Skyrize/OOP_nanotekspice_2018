@@ -12,6 +12,7 @@ namespace nts {
 Component4001::Component4001(const std::string& name)
 		: Component(name)
 {
+	_pins = std::vector<Pin *>(14);
 	std::vector<nts::Pin *> tab = _pins;
 
 	for (int i = 0; i != 14; i++) {

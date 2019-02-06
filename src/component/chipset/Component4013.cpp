@@ -12,6 +12,7 @@ namespace nts {
 Component4013::Component4013(const std::string& name)
 		: Component(name)
 {
+	_pins = std::vector<Pin *>(14);
 	std::vector<nts::Pin *> tab = _pins;
 	int truthTable[5][6] = {
 			{ 1, 0, 0, 0, 0, 1 },
