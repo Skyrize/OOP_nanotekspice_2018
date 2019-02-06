@@ -9,6 +9,7 @@
 #define ICOMPONENT_HPP_
 
 #include "NanoError.hpp"
+#include "Gates.hpp"
 #include <iostream>
 #include <vector>
 #include <list>

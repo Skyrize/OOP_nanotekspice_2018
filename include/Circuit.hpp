@@ -20,6 +20,9 @@ namespace nts {
             void run();
             void loop();
             void dump() const;
+            std::vector<IComponent *> getInputs() const { return _inputs; };
+            std::vector<IComponent *> getOutputs() const { return _outputs; };
+            std::vector<IComponent *> getComponents() const { return _components; };
             void pushComponent(IComponent *component);
             void pushInput(IComponent *component);
             void pushOutput(IComponent *component);

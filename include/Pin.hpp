@@ -19,17 +19,27 @@ namespace nts {
                 INPUT,
                 OUTPUT
             } mode;
-            Pin();
+            Pin() = default;
             virtual ~Pin() = default;
             void setState(Tristate state) { _state = state; };
-            void setLink(const class Pin &link) { _link = link; };
-            Tristate getState(void) { return _state; };
-            const class Pin &getLink(void) { return _link; };
-            void operator=(const class Pin &pin);
-        
+            void setLink(class Pin *link) { _link = link; };
+            Tristate getState(void) const { return _state; };
+            class Pin *getLink(void) const { return _link; };
+            void setMode(Pin::mode mode) {_mode = mode; };
+            Pin::mode getMode(void) const { return _mode; };
+            void setCompute(Tristate (*compute)()) {
+                this->compute = compute;
+            };
+            void operator=(const class Pin *pin) {
+                _state = pin->getState();
+                _link = pin->getLink();
+                _mode = pin->getMode();
+            };
+            Tristate (*compute)();
+
         private:
             Tristate _state = UNDEFINED;
-            class Pin &_link;
+            class Pin *_link;
             mode _mode = DEFAULT;
 
     };

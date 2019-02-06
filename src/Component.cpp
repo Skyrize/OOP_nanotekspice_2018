@@ -1,9 +1,9 @@
 /*
- ** EPITECH PROJECT, 2019
- ** OOP_nanotekspice_2018
- ** File description: Created on: 30 janv. 2019
- ** Component.cpp
- */
+** EPITECH PROJECT, 2019
+** OOP_nanotekspice_2018
+** File description: Created on: 30 janv. 2019
+** Component.cpp
+*/
 
 #include "Component.hpp"
 
@@ -32,12 +32,12 @@ void Component::dump() const
 }
 
 nts::Component::Component(const std::string& name)
-: name(name)
+: _name(name)
 {
 }
 
 class Pin *nts::Component::getPin(const size_t& pin)
 {
-		return this->pins[pin];
+		return this->_pins[pin];
 }
 }

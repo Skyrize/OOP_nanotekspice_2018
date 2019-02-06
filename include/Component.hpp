@@ -9,13 +9,14 @@
 #define SRC_COMPONENT_CHIPSET_COMPONENT_HPP_
 
 #include "nts.hpp"
+#include "Pin.hpp"
 
 namespace nts {
 
 class Component: public IComponent {
 	protected:
-		std::vector<Pin *> pins;
-		std::string name;
+		std::vector<Pin *> _pins;
+		std::string _name;
 
 	public:
 		Component(const std::string &name);
@@ -29,12 +30,12 @@ class Component: public IComponent {
 
 		std::string getName() const
 		{
-			return name;
+			return _name;
 		}
 
 		void setName(const std::string& name)
 		{
-			this->name = name;
+			this->_name = name;
 		}
 
 };

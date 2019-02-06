@@ -10,6 +10,7 @@ SRC	=	src/main.cpp								\
 		src/Factory.cpp								\
 		src/Circuit.cpp								\
 		src/Parser.cpp								\
+		src/CommandLineInterpreter.cpp				\
 													\
 													\
 		src/component/chipset/Component.cpp			\
@@ -42,9 +43,9 @@ OBJS	=	$(SRC:.cpp=.o)
 
 NAME	=	nanotekspice
 
-CXXFLAGS	=	 -Wall -Wextra -Werror -g
+CXXFLAGS	=	 -Wall -Wextra -Werror
 
-CC	=	g++ -I./include/ -I./include/component/chipset/ -I./include/component/special/ --std=c++11
+CC	=	g++ -g3 -I./include/ -I./include/component/chipset/ -I./include/component/special/ --std=c++11
 
 _END=$'\x1b[0m'
 _RED=$'\x1b[31m'
