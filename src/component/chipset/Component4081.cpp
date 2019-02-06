@@ -27,8 +27,8 @@ Component4081::Component4081(const std::string& name)
                     state1 = tab[i - 2]->compute();
                     state2 = tab[i - 3]->compute();
                 } else {
-                    state1 = tab[i + 2]->compute();
-                    state2 = tab[i + 3]->compute();
+                    state1 = tab[i]->compute();
+                    state2 = tab[i + 1]->compute();
                 }
                 return Gates::AND(state1, state2);
             });
@@ -37,8 +37,9 @@ Component4081::Component4081(const std::string& name)
             {
                 class Pin *pin = tab[i - 1]->getLink();
 
-                if (!pin)
+                if (!pin) {
                     return (tab[i - 1]->getState());
+                }   
                 return (pin->compute());
             });
         }

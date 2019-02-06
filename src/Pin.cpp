@@ -42,10 +42,17 @@ void nts::Pin::operator =(const class Pin& pin)
 {
 	this->_state = pin._state;
 	this->_link = pin._link;
-	this->_mode = pin._mode;
 }
 
 bool nts::Pin::isLinked(void)
 {
 	return this->_isLinked;
+}
+
+nts::Tristate nts::Pin::compute()
+{
+    nts::Tristate state = _ptr();
+
+    setState(state);
+    return state;
 }

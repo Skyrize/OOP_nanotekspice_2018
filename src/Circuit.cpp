@@ -8,6 +8,7 @@
 #include "Circuit.hpp"
 #include "Pin.hpp"
 #include "NanoError.hpp"
+#include "Clock.hpp"
 
 nts::Circuit::Circuit()
 {
@@ -62,8 +63,14 @@ void nts::Circuit::setInputValue(const std::string &name, size_t value)
 
 void nts::Circuit::run()
 {
+    Clock *c = nullptr;
+
     for (auto &i : _outputs) {
         i->compute();
+    }
+    for (auto &i : _inputs) {
+        if (c = dynamic_cast<nts::Clock *>(i.get()))
+            c->getPin(1)->setState((nts::Tristate)!c->getPin(1)->getState());
     }
 }
 
