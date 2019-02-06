@@ -13,7 +13,7 @@ namespace nts {
 Input::Input(const std::string &name, Tristate value)
 : Component(name)
 {
-	this->pins.push_back(new Pin(value));
+	this->_pins.push_back(new Pin(value));
 }
 
 Input::~Input()

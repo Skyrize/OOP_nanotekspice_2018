@@ -21,9 +21,9 @@ namespace nts {
             void run();
             void loop();
             void dump() const;
-            std::vector<std::unique_ptr<IComponent> > getInputs() const { return _inputs; };
-            std::vector<std::unique_ptr<IComponent> > getOutputs() const { return _outputs; };
-            std::vector<std::unique_ptr<IComponent> > getComponents() const { return _components; };
+            std::vector<std::unique_ptr<IComponent> > &getInputs() { return _inputs; };
+            std::vector<std::unique_ptr<IComponent> > &getOutputs() { return _outputs; };
+            std::vector<std::unique_ptr<IComponent> > &getComponents() { return _components; };
             void pushComponent(std::unique_ptr<IComponent> &component);
             void pushInput(std::unique_ptr<IComponent> &component);
             void pushOutput(std::unique_ptr<IComponent> &component);

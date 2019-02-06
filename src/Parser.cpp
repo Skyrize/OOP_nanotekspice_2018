@@ -15,6 +15,7 @@
 #include "Parser.hpp"
 #include "Factory.hpp"
 #include "Pin.hpp"
+#include "NanoError.hpp"
 
 namespace nts {
 
