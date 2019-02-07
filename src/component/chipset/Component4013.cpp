@@ -48,6 +48,7 @@ Component4013::Component4013(const std::string& name)
 								return (Tristate(truthTable[i][4 + c]));
 						}
 					}
+					return tab[c]->getState();
 				});
 		} else if (c == 11 || c == 12) {
 			_pins[c] = new Pin([tab, truthTable, c]() {
@@ -74,6 +75,7 @@ Component4013::Component4013(const std::string& name)
 								return (Tristate(truthTable[i][c - 8]));
 						}
 					}
+					return tab[c]->getState();
 				});
 		} else {
 			_pins[c] = new Pin([tab, c]()->Tristate

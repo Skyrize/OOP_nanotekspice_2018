@@ -19,8 +19,8 @@ int main(int ac, char **av)
     if (ac == 1)
     	throw nts::UsageError();
     try {
-    nts::Parser parser(av[1]);
-	circuit = parser.processParsing(ac, av);
+    	nts::Parser parser(av[1]);
+    	circuit = parser.processParsing(ac, av);
     } catch (nts::NanoError &e) {
     	std::cout << e.what() << std::endl;
     	return (84);
