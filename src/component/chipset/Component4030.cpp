@@ -12,7 +12,36 @@ namespace nts {
 Component4030::Component4030(const std::string& name)
 : Component(name)
 {
-	// TODO Auto-generated constructor stub
+	_pins = std::vector<Pin *>(14);
+    std::vector<nts::Pin *> tab = _pins;
+
+	for (int i = 1; i != 15; i++) {
+        if (i == 3 || i == 4 || i == 10 || i == 11) {
+            _pins[i - 1] = new Pin([tab, i]()->Tristate
+            {
+                Tristate state1;
+                Tristate state2;
+            
+                if (i == 3 || i == 10) {
+                    state1 = tab[i - 2]->compute();
+                    state2 = tab[i - 3]->compute();
+                } else {
+                    state1 = tab[i]->compute();
+                    state2 = tab[i + 1]->compute();
+                }
+                return Gates::XOR(state1, state2);
+            });
+        } else {
+            _pins[i - 1] = new Pin([tab, i]()->Tristate
+            {
+                class Pin *pin = tab[i - 1]->getLink();
+
+                if (!pin)
+                    return (tab[i - 1]->getState());
+                return (pin->compute());
+            });
+        }
+    }
 
 }
 
