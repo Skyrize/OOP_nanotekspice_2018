@@ -15,8 +15,13 @@ Component4094::Component4094(const std::string& name)
 	_pins = std::vector<Pin *>(16);
 	std::vector<nts::Pin *> tab = _pins;
 
-	int truthTable[5][6] = { { 1, 0, -2, -2 }, { 0, 0, -2, -2 },
-			{ 1, 1, 0, -2 }, { 1, 1, 1, 0 }, { 1, 1, 1, 1 }, { 0, 1, 1, 1 } };
+	int truthTable[6][4] = {
+			{ 1, 0, -2, -2 },
+			{ 0, 0, -2, -2 },
+			{ 1, 1, 0, -2 },
+			{ 1, 1, 1, 0 },
+			{ 1, 1, 1, 1 },
+			{ 0, 1, 1, 1 } };
 
 	for (int c = 0; c != 16; c++) {
 		if (c == 3) {

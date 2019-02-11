@@ -25,7 +25,6 @@ void nts::Pin::setState(Tristate state)
 void nts::Pin::setLink(class Pin *link)
 {
 	_link = link;
-	link->_isLinked = true;
 }
 
 nts::Tristate nts::Pin::getState(void)
@@ -42,11 +41,6 @@ void nts::Pin::operator =(const class Pin& pin)
 {
 	this->_state = pin._state;
 	this->_link = pin._link;
-}
-
-bool nts::Pin::isLinked(void)
-{
-	return this->_isLinked;
 }
 
 nts::Tristate nts::Pin::compute()

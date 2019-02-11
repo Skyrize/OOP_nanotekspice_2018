@@ -216,8 +216,8 @@ void Parser::verifyOutputLinkage()
 	for (auto &e : components) {
 		tmp = dynamic_cast<Output *>(e.second);
 		if (tmp) {
-			if (tmp->getPin(1)->isLinked() == false)
-				throw UnlinkedOutputError();
+			if (tmp->getPin(1)->getLink() == nullptr)
+				throw UnlinkedOutputError("Output \'" + tmp->getName() + "\' isn't linked.");
 		}
 	}
 }

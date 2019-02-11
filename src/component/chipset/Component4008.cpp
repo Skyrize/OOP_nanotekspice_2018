@@ -69,7 +69,6 @@ Component4008::Component4008(const std::string& name)
             });
         }
     }
->>>>>>> b5adc6c591b09cae8c38780fdf58cc3d0fcb734b
 }
 
 Component4008::~Component4008()

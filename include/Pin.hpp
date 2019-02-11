@@ -25,13 +25,11 @@ namespace nts {
             Tristate getState(void);
             Pin *getLink(void);
             void operator=(const class Pin &pin);
-            bool isLinked(void);
             Tristate compute();
 
         private:
             Tristate _state = UNDEFINED;
             class Pin *_link = nullptr;
-            bool _isLinked = false;
             mTristate _ptr;
     };
 }

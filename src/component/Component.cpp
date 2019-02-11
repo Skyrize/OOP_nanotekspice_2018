@@ -28,6 +28,7 @@ void Component::setLink(size_t pin, nts::IComponent& other, size_t otherPin)
 	Pin *pin2 = other.getPin(otherPin);
 
 	pin1->setLink(pin2);
+	pin2->setLink(pin1);
 }
 
 void Component::dump() const
