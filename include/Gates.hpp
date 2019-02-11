@@ -12,6 +12,11 @@
 
 namespace nts {
 
+    enum Side {
+        LEFT = 0,
+        RIGHT = 1
+    };
+
     class Gates {
         public:
             Gates() = default;
@@ -21,6 +26,8 @@ namespace nts {
             static Tristate NOR(Tristate state1, Tristate state2);
             static Tristate NAND(Tristate state1, Tristate state2);
             static Tristate XOR(Tristate state1, Tristate state2);
+            static Tristate SUM(Tristate state1, Tristate state2,
+                Tristate state3, Side side);
 
     };
 

@@ -38,9 +38,8 @@ Component4081::Component4081(const std::string& name)
             {
                 class Pin *pin = tab[i - 1]->getLink();
 
-                if (!pin) {
+                if (!pin)
                     return (tab[i - 1]->getState());
-                }   
                 return (pin->compute());
             });
         }

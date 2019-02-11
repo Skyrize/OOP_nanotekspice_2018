@@ -33,8 +33,14 @@ namespace nts {
             class Pin *_link = nullptr;
             bool _isLinked = false;
             mTristate _ptr;
-
     };
 }
+
+typedef struct elem_s {
+    int data;
+    struct elem_s *left;
+    struct elem_s *right;
+    
+} elem_t;
 
 #endif /* !PIN_HPP_ */

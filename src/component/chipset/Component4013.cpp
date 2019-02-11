@@ -25,58 +25,55 @@ Component4013::Component4013(const std::string& name)
 	for (int c = 0; c != 14; c++) {
 		if (c == 0 || c == 1) {
 			_pins[c] = new Pin([tab, truthTable, c]() {
-					int sequence[4] = {tab[2]->compute(), tab[3]->compute(), tab[4]->compute(), tab[5]->compute()};
-					bool comparaisonSucceed = true;
-					bool hasUndefined = false;
-					int i = 0;
+				int sequence[4] = {tab[2]->compute(), tab[3]->compute(), tab[4]->compute(), tab[5]->compute()};
+				bool comparaisonSucceed = true;
+				bool hasUndefined = false;
+				int i = 0;
 
-					for (; i != 5; i++, comparaisonSucceed = true, hasUndefined = false) {
+				for (; i != 5; i++, comparaisonSucceed = true, hasUndefined = false) {
 
-						for (int j = 0; j != 4; j++) {
-							if (truthTable[i][j] != -1)
-								continue;
-							if (sequence[j] == Tristate::UNDEFINED)
-								hasUndefined = true;
-							else if (sequence[j] != truthTable[i][j])
-								comparaisonSucceed = false;
-						}
-
-						if (comparaisonSucceed == true) {
-							if (hasUndefined == true)
-								return (Tristate::UNDEFINED);
-							else
-								return (Tristate(truthTable[i][4 + c]));
-						}
+					for (int j = 0; j != 4; j++) {
+						if (truthTable[i][j] != -1)
+							continue;
+						if (sequence[j] == Tristate::UNDEFINED)
+							hasUndefined = true;
+						else if (sequence[j] != truthTable[i][j])
+							comparaisonSucceed = false;
 					}
-					return tab[c]->getState();
-				});
+
+					if (comparaisonSucceed == true) {
+						if (hasUndefined == true)
+							return (Tristate::UNDEFINED);
+						else
+							return (Tristate(truthTable[i][4 + c]));
+					}
+				}
+				return tab[c]->getState();
+			});
 		} else if (c == 11 || c == 12) {
 			_pins[c] = new Pin([tab, truthTable, c]() {
-					int sequence[4] = {tab[7]->compute(), tab[8]->compute(), tab[9]->compute(), tab[10]->compute()};
-					bool comparaisonSucceed = true;
-					bool hasUndefined = false;
-					int i = 0;
-
-					for (; i != 5; i++, comparaisonSucceed = true, hasUndefined = false) {
-
-						for (int j = 0; j != 4; j++) {
-							if (truthTable[i][j] != -1)
-								continue;
-							if (sequence[j] == Tristate::UNDEFINED)
-								hasUndefined = true;
-							else if (sequence[j] != truthTable[i][j])
-								comparaisonSucceed = false;
-						}
-
-						if (comparaisonSucceed == true) {
-							if (hasUndefined == true)
-								return (Tristate::UNDEFINED);
-							else
-								return (Tristate(truthTable[i][c - 8]));
-						}
-					}
-					return tab[c]->getState();
-				});
+                int sequence[4] = {tab[7]->compute(), tab[8]->compute(), tab[9]->compute(), tab[10]->compute()};
+                bool comparaisonSucceed = true;
+                bool hasUndefined = false;
+                int i = 0;
+                for (; i != 5; i++, comparaisonSucceed = true, hasUndefined = false) {
+                    for (int j = 0; j != 4; j++) {
+                        if (truthTable[i][j] != -1)
+                            continue;
+                        if (sequence[j] == Tristate::UNDEFINED)
+                            hasUndefined = true;
+                        else if (sequence[j] != truthTable[i][j])
+                            comparaisonSucceed = false;
+                    }
+                    if (comparaisonSucceed == true) {
+                        if (hasUndefined == true)
+                            return (Tristate::UNDEFINED);
+                        else
+                            return (Tristate(truthTable[i][c - 8]));
+                    }
+                }
+                return tab[c]->getState();
+			});
 		} else {
 			_pins[c] = new Pin([tab, c]()->Tristate
 			            {
