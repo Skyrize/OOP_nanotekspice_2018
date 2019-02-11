@@ -15,7 +15,7 @@ Component4801::Component4801(const std::string& name)
 	_pins = std::vector<Pin *>(24);
 
 	for (int i = 0; i != 24; i++)
-		_pins.push_back(new Pin(nullptr));
+		_pins[i] = new Pin(nullptr);
 }
 
 Component4801::~Component4801()

@@ -176,7 +176,7 @@ void Parser::parseArgument(std::string argument)
 	std::vector<std::string> lineContent;
 	lineContent = getLineContent(argument, '=');
 	if (!components[lineContent[0]])
-		throw UnknowInputError();
+		throw UnknowInputError("Input \'" + lineContent[0] + "\' is unknow.");
 	if (std::stoi(lineContent[1]) == Tristate::TRUE) {
 		components[lineContent[0]]->getPin(1)->setState(Tristate::TRUE);
 	} else if (std::stoi(lineContent[1]) == Tristate::FALSE) {

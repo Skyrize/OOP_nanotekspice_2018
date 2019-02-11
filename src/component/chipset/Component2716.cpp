@@ -15,7 +15,7 @@ Component2716::Component2716(const std::string& name, const std::string &fileNam
 	_pins = std::vector<Pin *>(24);
 
 	for (int i = 0; i != 24; i++)
-		_pins.push_back(new Pin(nullptr));
+		_pins[i] = new Pin(nullptr);
 
 }
 

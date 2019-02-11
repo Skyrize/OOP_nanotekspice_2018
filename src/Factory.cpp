@@ -79,7 +79,7 @@ std::vector<std::string> getDefaultValue(const std::string &line)
 std::unique_ptr<IComponent> createComponent(const std::string &type, const std::string &value)
 {
 	if (!methodPointers[type]) {
-		throw ComponentTypeError();
+		throw ComponentTypeError("In instanciation of \'" + value + "\', type \'" + type + "\' is unknowed.");
 	}
 	return (methodPointers[type](value));
 }
