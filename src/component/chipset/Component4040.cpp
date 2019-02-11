@@ -12,8 +12,10 @@ namespace nts {
 Component4040::Component4040(const std::string& name)
 : Component(name)
 {
-	// TODO Auto-generated constructor stub
+	_pins = std::vector<Pin *>(16);
 
+	for (int i = 0; i != 16; i++)
+		_pins.push_back(new Pin(nullptr));
 }
 
 Component4040::~Component4040()

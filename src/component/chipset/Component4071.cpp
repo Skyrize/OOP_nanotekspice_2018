@@ -12,8 +12,10 @@ namespace nts {
 Component4071::Component4071(const std::string& name)
 : Component(name)
 {
-	// TODO Auto-generated constructor stub
+	_pins = std::vector<Pin *>(13);
 
+	for (int i = 0; i != 13; i++)
+		_pins.push_back(new Pin(nullptr));
 }
 
 Component4071::~Component4071()
