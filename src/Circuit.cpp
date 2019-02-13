@@ -61,6 +61,10 @@ void nts::Circuit::setInputValue(const std::string &name, size_t value)
 {
     for (auto &i : _inputs) {
         if (name == i->getName()) {
+            if (dynamic_cast<nts::Clock *>(i.get())) {
+                std::cerr << "U" << std::endl;
+                return;
+            }
             i->getPin(1)->setState((Tristate)value);
         }
     }

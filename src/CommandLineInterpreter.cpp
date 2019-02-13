@@ -58,12 +58,12 @@ void nts::CommandLineInterpreter::setInputValue(nts::Circuit *circuit) const
             inputFound = 1;
     }
     if (name.empty() || !inputFound) {
-        std::cerr << "Please enter a valid input name" << std::endl;
+        std::cerr << "U" << std::endl;
         return;
     }
     value = atoi(_cmd.substr(pos + 1).c_str());
     if (value != 1 && value != 0) {
-        std::cerr << "Please enter a valid input value" << std::endl;
+        std::cerr << "U" << std::endl;
         return;
     }
     circuit->setInputValue(name, value);
@@ -80,7 +80,7 @@ void nts::CommandLineInterpreter::start(nts::Circuit *circuit)
         } else if (_map[_cmd])
             (this->*_map[_cmd])(circuit);
         else
-            std::cerr << "Please enter a valid command." << std::endl;
+            std::cerr << "U" << std::endl;
     }
 }
 
