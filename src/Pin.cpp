@@ -45,6 +45,8 @@ void nts::Pin::operator =(const class Pin& pin)
 
 nts::Tristate nts::Pin::compute()
 {
+    static int a = 1;
+    std::cout << "test " << a++ << std::endl;
     nts::Tristate state = _ptr();
 
     setState(state);

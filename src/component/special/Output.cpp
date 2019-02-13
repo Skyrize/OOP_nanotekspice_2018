@@ -14,10 +14,9 @@ Output::Output(const std::string &name)
 : Component(name)
 {
 	_pins = std::vector<Pin *>(1);
-    class Pin *self = this->_pins[0];
 
-	_pins[0] = new Pin([self]() -> Tristate {
-        return (self->getLink()->compute());
+	_pins[0] = new Pin([&]() -> Tristate {
+        return (this->_pins[0]->getLink()->compute());
     });
 }
 

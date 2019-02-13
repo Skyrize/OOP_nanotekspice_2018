@@ -76,13 +76,13 @@ Component4013::Component4013(const std::string& name)
 			});
 		} else {
 			_pins[c] = new Pin([tab, c]()->Tristate
-			            {
-			                class Pin *pin = tab[c]->getLink();
+			{
+			    class Pin *pin = tab[c]->getLink();
 
-			                if (!pin)
-			                    return (tab[c]->getState());
-			                return (pin->compute());
-			            });
+			    if (!pin)
+			        return (tab[c]->getState());
+			    return (pin->compute());
+			});
 		}
 	}
 }

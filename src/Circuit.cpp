@@ -48,7 +48,7 @@ void nts::Circuit::pushOutput(std::unique_ptr<IComponent> &output)
 void nts::Circuit::display() const
 {
     for (auto &i : _outputs) {
-        std::cout << i->getName() << "=" << i->getPin(0)->getState() << std::endl;
+        std::cout << i->getName() << "=" << i->getPin(1)->getState() << std::endl;
     }
 }
 
@@ -56,7 +56,7 @@ void nts::Circuit::setInputValue(const std::string &name, size_t value)
 {
     for (auto &i : _inputs) {
         if (name == i->getName()) {
-            i->getPin(0)->setState((Tristate)value);
+            i->getPin(1)->setState((Tristate)value);
         }
     }
 }
@@ -66,7 +66,7 @@ void nts::Circuit::run()
     Clock *c = nullptr;
 
     for (auto &i : _outputs) {
-        i->compute();
+        i->compute(1);
     }
     for (auto &i : _inputs) {
         if (c = dynamic_cast<nts::Clock *>(i.get()))

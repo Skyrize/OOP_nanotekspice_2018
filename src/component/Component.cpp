@@ -18,8 +18,7 @@ Component::~Component()
 
 nts::Tristate Component::compute(size_t pin)
 {
-	(void)pin;
-	return nts::Tristate::TRUE;
+	return _pins[pin - 1]->compute();
 }
 
 void Component::setLink(size_t pin, nts::IComponent& other, size_t otherPin)
@@ -47,7 +46,7 @@ nts::Component::Component(const std::string& name)
 
 class Pin *nts::Component::getPin(const size_t& pin)
 {
-		if (this->_pins.size() <= pin - 1)
+		if (this->_pins.size() <= pin - 1 || pin - 1 < 0)
 			throw UnexistingPinError("In component \'" + this->_name + "\', requested pin " + std::to_string(pin) + " is out of bound.");
 		return this->_pins[pin - 1];
 }

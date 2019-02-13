@@ -10,21 +10,26 @@
 #include "CommandLineInterpreter.hpp"
 #include "NanoError.hpp"
 #include "Parser.hpp"
+#include "string.h"
 
 int main(int ac, char **av)
 {
     nts::Circuit *circuit = nullptr;
     nts::CommandLineInterpreter cli;
 
-    if (ac == 1)
-    	throw nts::UsageError();
+    if (ac == 1
+    || (ac == 2 && (!strcmp(av[1], "-h") || !strcmp(av[1], "--help")))) {
+    	std::cout << "Usage: ./nanotekspice [circuit_file.nts] " <<
+        "[component=value ...]" << std::endl;
+        return 84;
+    }
     try {
     	nts::Parser parser(av[1]);
     	circuit = parser.processParsing(ac, av);
+        cli.start(circuit);
     } catch (nts::NanoError &e) {
     	std::cout << e.what() << std::endl;
-    	return (84);
+    	return 84;
     }
-    cli.start(circuit);
     return 0;
 }
