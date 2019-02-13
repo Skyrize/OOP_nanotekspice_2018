@@ -28,7 +28,7 @@ int main(int ac, char **av)
     	circuit = parser.processParsing(ac, av);
     	cli.start(circuit);
     } catch (nts::NanoError &e) {
-    	std::cout << e.what() << std::endl;
+    	std::cerr << e.what() << std::endl;
     	return 84;
     }
     return 0;
