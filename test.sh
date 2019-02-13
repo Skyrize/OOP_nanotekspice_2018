@@ -127,7 +127,48 @@ else
     let "passed += 1"
 fi
 
-echo "TESTING PARSING DONE. RESULT : " $passed"/17 TESTS PASSED."
+echo "" | ./nanotekspice samples/marcon/4008.nts
+if [ $? != 0 ]; then
+    echo -e  "FAILED Test ./nanotekspice samples/marcon/4008.nts\n"
+else
+    let "passed += 1"
+fi
+
+echo "" | ./nanotekspice samples/marcon/and.nts
+if [ $? != 0 ]; then
+    echo -e  "FAILED Test ./nanotekspice samples/marcon/and.nts\n"
+else
+    let "passed += 1"
+fi
+echo "" | ./nanotekspice samples/marcon/nand.nts
+if [ $? != 0 ]; then
+    echo -e  "FAILED Test ./nanotekspice samples/marcon/nand.nts\n"
+else
+    let "passed += 1"
+fi
+
+echo "" | ./nanotekspice samples/marcon/nor.nts
+if [ $? != 0 ]; then
+    echo -e  "FAILED Test ./nanotekspice samples/marcon/nor.nts\n"
+else
+    let "passed += 1"
+fi
+
+echo "" | ./nanotekspice samples/marcon/or.nts
+if [ $? != 0 ]; then
+    echo -e  "FAILED Test ./nanotekspice samples/marcon/or.nts\n"
+else
+    let "passed += 1"
+fi
+
+echo "" | ./nanotekspice samples/marcon/xor.nts
+if [ $? != 0 ]; then
+    echo -e  "FAILED Test ./nanotekspice samples/marcon/xor.nts\n"
+else
+    let "passed += 1"
+fi
+
+echo "TESTING PARSING DONE. RESULT : " $passed"/23 TESTS PASSED."
 echo -e "\nTESTING BONUS :"
 
 let "passed = 0"

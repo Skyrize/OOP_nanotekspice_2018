@@ -1,0 +1,31 @@
+.chipsets:
+
+true 	t
+false 	f
+4008 	gate
+output	a
+output	b
+output	c
+output	d
+output  carry_out
+
+.links:
+
+gate:15 	t:1
+gate:1 		t:1
+a:1 		gate:13
+
+gate:2 		f:1
+gate:3 		t:1
+b:1 		gate:12
+
+gate:4 		t:1
+gate:5 		f:1
+c:1 		gate:11
+
+gate:6	 	f:1
+gate:7 		f:1
+d:1 		gate:10
+
+gate:9 		t:1
+carry_out:1 	gate:14

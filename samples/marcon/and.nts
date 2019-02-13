@@ -1,0 +1,27 @@
+# One and gate
+
+.chipsets:
+true  t
+false f
+output		one
+output		two
+output		three
+output		four
+4081		gate
+
+.links:
+t:1		gate:1
+t:1		gate:2
+one:1 	gate:3
+
+t:1		gate:5
+f:1		gate:6
+two:1 	gate:4
+
+f:1		gate:8
+t:1		gate:9
+three:1 gate:10
+
+f:1		gate:12
+f:1		gate:13
+four:1 	gate:11
