@@ -71,6 +71,8 @@ void nts::CommandLineInterpreter::setInputValue(nts::Circuit *circuit) const
 
 void nts::CommandLineInterpreter::start(nts::Circuit *circuit)
 {
+    circuit->run();
+    circuit->display();
     while (1) {
         getLine();
         if (_cmd.find('=') != std::string::npos) {

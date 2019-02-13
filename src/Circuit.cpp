@@ -9,6 +9,7 @@
 #include "Pin.hpp"
 #include "NanoError.hpp"
 #include "Clock.hpp"
+#include <algorithm>
 
 nts::Circuit::Circuit()
 {
@@ -43,6 +44,10 @@ void nts::Circuit::pushOutput(std::unique_ptr<IComponent> &output)
 		}
 	}
     _outputs.push_back(std::move(output));
+    std::sort(_outputs.begin(), _outputs.end(),
+    [](std::unique_ptr<IComponent> &a, std::unique_ptr<IComponent> &b) {
+        return a.get()->getName() < b.get()->getName();
+    });
 }
 
 void nts::Circuit::display() const
@@ -76,8 +81,8 @@ void nts::Circuit::run()
 
 void nts::Circuit::loop()
 {
-    while (1)
-        run();
+    while (1);
+        // run();
 }
 
 void nts::Circuit::dump() const
