@@ -16,8 +16,10 @@ int main(int ac, char **av)
     nts::Circuit *circuit = nullptr;
     nts::CommandLineInterpreter cli;
 
-    if (ac == 1)
-    	throw nts::UsageError();
+    if (ac == 1) {
+    	std::cout << nts::UsageError().what() << std::endl;
+    	return (1);
+    }
     try {
     	nts::Parser parser(av[1]);
     	circuit = parser.processParsing(ac, av);
