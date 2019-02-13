@@ -12,12 +12,11 @@ namespace nts {
 Clock::Clock(const std::string &name, Tristate value)
 : Input(name, value)
 {
-    class Pin *self = this->_pins[0];
+    _pins = std::vector<Pin *>(1);
 
-    self->setState(value);
-    _pins[0] = new Pin([self]() -> Tristate {
-        return self->getState();
-    });
+    _pins[0] = new Pin([&]() -> Tristate {
+        return this->getPin(1)->getState();
+    }, value);
 }
 
 Clock::~Clock()
