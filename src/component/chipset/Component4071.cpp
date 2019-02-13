@@ -17,27 +17,27 @@ Component4071::Component4071(const std::string& name)
 
 	for (int i = 1; i != 15; i++) {
         if (i == 3 || i == 4 || i == 10 || i == 11) {
-            _pins[i - 1] = new Pin([tab, i]()->Tristate
+            _pins[i - 1] = new Pin([&, i]()->Tristate
             {
                 Tristate state1;
                 Tristate state2;
             
                 if (i == 3 || i == 10) {
-                    state1 = tab[i - 2]->compute();
-                    state2 = tab[i - 3]->compute();
+                    state1 = this->getPin(i - 1)->compute();
+                    state2 = this->getPin(i - 2)->compute();
                 } else {
-                    state1 = tab[i]->compute();
-                    state2 = tab[i + 1]->compute();
+                    state1 = this->getPin(i + 1)->compute();
+                    state2 = this->getPin(i + 2)->compute();
                 }
                 return Gates::OR(state1, state2);
             });
         } else {
-            _pins[i - 1] = new Pin([tab, i]()->Tristate
+            _pins[i - 1] = new Pin([&, i]()->Tristate
             {
-                class Pin *pin = tab[i - 1]->getLink();
+                class Pin *pin = this->getPin(i)->getLink();
 
                 if (!pin)
-                    return (tab[i - 1]->getState());
+                    return (this->getPin(i)->getState());
                 return (pin->compute());
             });
         }

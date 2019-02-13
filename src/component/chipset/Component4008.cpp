@@ -17,54 +17,54 @@ Component4008::Component4008(const std::string& name)
 
 	for (int i = 1; i < 17; i++) {
         if (i == 10 || i == 11 || i == 12 || i == 13 || i == 14) {
-            _pins[i - 1] = new Pin([tab, i]()->Tristate
+            _pins[i - 1] = new Pin([&, i]()->Tristate
             {
                 if (i == 10) {
-                    return Gates::SUM(tab[9 - 1]->compute(),
-                        tab[7 - 1]->compute(),
-                        tab[6 - 1]->compute(), RIGHT);
+                    return Gates::SUM(this->getPin(9)->compute(),
+                        this->getPin(7)->compute(),
+                        this->getPin(6)->compute(), RIGHT);
                 } else if (i == 11) {
-                    return Gates::SUM(tab[4 - 1]->compute(), 
-                        tab[5 - 1]->compute(),
-                        Gates::SUM(tab[9 - 1]->compute(),
-                        tab[7 - 1]->compute(),
-                        tab[6 - 1]->compute(), LEFT), RIGHT);
+                    return Gates::SUM(this->getPin(4)->compute(), 
+                        this->getPin(5)->compute(),
+                        Gates::SUM(this->getPin(9)->compute(),
+                        this->getPin(7)->compute(),
+                        this->getPin(6)->compute(), LEFT), RIGHT);
                 } else if (i == 12) {
-                    return Gates::SUM(tab[2 - 1]->compute(),
-                        tab[3 - 1]->compute(),
-                        Gates::SUM(tab[4 - 1]->compute(), 
-                        tab[5 - 1]->compute(),
-                        Gates::SUM(tab[9 - 1]->compute(),
-                        tab[7 - 1]->compute(),
-                        tab[6 - 1]->compute(), LEFT), LEFT), RIGHT);
+                    return Gates::SUM(this->getPin(2)->compute(),
+                        this->getPin(3)->compute(),
+                        Gates::SUM(this->getPin(4)->compute(), 
+                        this->getPin(5)->compute(),
+                        Gates::SUM(this->getPin(9)->compute(),
+                        this->getPin(7)->compute(),
+                        this->getPin(6)->compute(), LEFT), LEFT), RIGHT);
                 } else if (i == 13) {
-                    return Gates::SUM(tab[1 - 1]->compute(), 
-                        tab[15 - 1]->compute(),
-                        Gates::SUM(tab[2 - 1]->compute(),
-                        tab[3 - 1]->compute(),
-                        Gates::SUM(tab[4 - 1]->compute(), 
-                        tab[5 - 1]->compute(),
-                        Gates::SUM(tab[9 - 1]->compute(),
-                        tab[7 - 1]->compute(),
-                        tab[6 - 1]->compute(), LEFT), LEFT), LEFT), RIGHT);
+                    return Gates::SUM(this->getPin(1)->compute(), 
+                        this->getPin(15)->compute(),
+                        Gates::SUM(this->getPin(2)->compute(),
+                        this->getPin(3)->compute(),
+                        Gates::SUM(this->getPin(4)->compute(), 
+                        this->getPin(5)->compute(),
+                        Gates::SUM(this->getPin(9)->compute(),
+                        this->getPin(7)->compute(),
+                        this->getPin(6)->compute(), LEFT), LEFT), LEFT), RIGHT);
                 } else
-                    return Gates::SUM(tab[1 - 1]->compute(), 
-                        tab[15 - 1]->compute(),
-                        Gates::SUM(tab[2 - 1]->compute(),
-                        tab[3 - 1]->compute(),
-                        Gates::SUM(tab[4 - 1]->compute(),
-                        tab[5 - 1]->compute(),
-                        Gates::SUM(tab[9 - 1]->compute(),
-                        tab[7 - 1]->compute(),
-                        tab[6 - 1]->compute(), LEFT), LEFT), LEFT), LEFT);
+                    return Gates::SUM(this->getPin(1)->compute(), 
+                        this->getPin(15)->compute(),
+                        Gates::SUM(this->getPin(2)->compute(),
+                        this->getPin(3)->compute(),
+                        Gates::SUM(this->getPin(4)->compute(),
+                        this->getPin(5)->compute(),
+                        Gates::SUM(this->getPin(9)->compute(),
+                        this->getPin(7)->compute(),
+                        this->getPin(6)->compute(), LEFT), LEFT), LEFT), LEFT);
             });
         } else {
-            _pins[i - 1] = new Pin([tab, i]()->Tristate
+            _pins[i - 1] = new Pin([&, i]()->Tristate
             {
-                class Pin *pin = tab[i - 1]->getLink();
+                class Pin *pin = this->getPin(i)->getLink();
 
                 if (!pin)
-                    return (tab[i - 1]->getState());
+                    return (this->getPin(i)->getState());
                 return (pin->compute());
             });
         }
