@@ -8,6 +8,13 @@ echo "BUILD DONE."
 
 echo "TESTING PARSING :"
 
+echo "" | ./nanotekspice unexisting_file_test.nts
+if [ $? == 0 ]; then
+    echo -e  "FAILED Test ./nanotekspice unexisting_file_test.nts\n"
+else
+    let "passed += 1"
+fi
+
 echo "" | ./nanotekspice samples/5input_and.nts a=0 b=0 c=0 d=0 e=0
 if [ $? != 0 ]; then
     echo -e  "FAILED Test ./nanotekspice samples/5input_and.nts a=0 b=0 c=0 d=0 e=0\n"
@@ -168,7 +175,7 @@ else
     let "passed += 1"
 fi
 
-echo "TESTING PARSING DONE. RESULT : " $passed"/23 TESTS PASSED."
+echo "TESTING PARSING DONE. RESULT : " $passed"/24 TESTS PASSED."
 echo -e "\nTESTING BONUS :"
 
 let "passed = 0"

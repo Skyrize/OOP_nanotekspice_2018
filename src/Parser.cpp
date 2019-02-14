@@ -23,7 +23,7 @@ Parser::Parser(const std::string& fileName)
 {
 	this->ntsFile.open(fileName.c_str(), std::ifstream::in);
 
-	if (!this->ntsFile)
+	if (this->ntsFile.good() == false)
 		throw CircuitFileError("Unable to open \'" + fileName + "\' file");
 }
 
@@ -241,6 +241,7 @@ Circuit* Parser::processParsing(int nbArgs, char **arguments)
 		verifyInputInitialisation();
 		verifyOutputLinkage();
 	}
+	this->ntsFile.close();
 	return circuit;
 }
 
