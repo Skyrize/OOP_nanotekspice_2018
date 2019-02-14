@@ -13,7 +13,6 @@ Component4013::Component4013(const std::string& name)
 		: Component(name)
 {
 	_pins = std::vector<Pin *>(14);
-	std::vector<nts::Pin *> tab = _pins;
 	int truthTable[5][6] = {
 			{ 1, 0, 0, 0, 0, 1 },
 			{ 1, 1, 0, 0, 1, 0 },
@@ -24,8 +23,8 @@ Component4013::Component4013(const std::string& name)
 
 	for (int c = 0; c != 14; c++) {
 		if (c == 0 || c == 1) {
-			_pins[c] = new Pin([tab, truthTable, c]() {
-				int sequence[4] = {tab[2]->compute(), tab[3]->compute(), tab[4]->compute(), tab[5]->compute()};
+			_pins[c] = new Pin([&, truthTable, c]() {
+				int sequence[4] = {this->getPin(2 + 1)->compute(), this->getPin(3 + 1)->compute(), this->getPin(4 + 1)->compute(), this->getPin(5 + 1)->compute()};
 				bool comparaisonSucceed = true;
 				bool hasUndefined = false;
 				int i = 0;
@@ -48,11 +47,11 @@ Component4013::Component4013(const std::string& name)
 							return (Tristate(truthTable[i][4 + c]));
 					}
 				}
-				return tab[c]->getState();
+				return this->getPin(c + 1)->getState();
 			});
 		} else if (c == 11 || c == 12) {
-			_pins[c] = new Pin([tab, truthTable, c]() {
-                int sequence[4] = {tab[7]->compute(), tab[8]->compute(), tab[9]->compute(), tab[10]->compute()};
+			_pins[c] = new Pin([&, truthTable, c]() {
+                int sequence[4] = {this->getPin(7+1)->compute(), this->getPin(8+1)->compute(), this->getPin(9+1)->compute(), this->getPin(1+10)->compute()};
                 bool comparaisonSucceed = true;
                 bool hasUndefined = false;
                 int i = 0;
@@ -72,15 +71,15 @@ Component4013::Component4013(const std::string& name)
                             return (Tristate(truthTable[i][c - 8]));
                     }
                 }
-                return tab[c]->getState();
+                return this->getPin(c+1)->getState();
 			});
 		} else {
-			_pins[c] = new Pin([tab, c]()->Tristate
+			_pins[c] = new Pin([&, c]()->Tristate
 			{
-			    class Pin *pin = tab[c]->getLink();
+			    class Pin *pin = this->getPin(c + 1)->getLink();
 
 			    if (!pin)
-			        return (tab[c]->getState());
+			        return (this->getPin(c + 1)->getState());
 			    return (pin->compute());
 			});
 		}

@@ -13,13 +13,12 @@ Component4069::Component4069(const std::string& name)
 		: Component(name)
 {
 	_pins = std::vector<Pin *>(14);
-	std::vector<nts::Pin *> tab = _pins;
 
 	for (int i = 0; i != 14; i++) {
 		if (i == 1 || i == 3 || i == 5) {
-			_pins[i] = new Pin([tab, i]()
+			_pins[i] = new Pin([&, i]()
 			{
-				Tristate state = tab[i - 1]->compute();
+				Tristate state = this->getPin(i)->compute();
 
 				if (state == Tristate::TRUE)
 				return Tristate::FALSE;
@@ -28,9 +27,9 @@ Component4069::Component4069(const std::string& name)
 				return Tristate::UNDEFINED;
 			});
 		} else if (i == 11 || i == 9 || i == 7) {
-			_pins[i] = new Pin([tab, i]()
+			_pins[i] = new Pin([&, i]()
 			{
-				Tristate state = tab[i + 1]->compute();
+				Tristate state = this->getPin(i + 2)->compute();
 
 				if (state == Tristate::TRUE)
 				return Tristate::FALSE;
@@ -39,12 +38,12 @@ Component4069::Component4069(const std::string& name)
 				return Tristate::UNDEFINED;
 			});
 		} else {
-			_pins[i] = new Pin([tab, i]()->Tristate
+			_pins[i] = new Pin([&, i]()->Tristate
 			{
-				class Pin *pin = tab[i]->getLink();
+				class Pin *pin = this->getPin(i+1)->getLink();
 
 				if (!pin) {
-					return (tab[i]->getState());
+					return (this->getPin(i + 1)->getState());
 				}
 				return (pin->compute());
 			});

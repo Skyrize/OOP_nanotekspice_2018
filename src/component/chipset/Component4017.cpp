@@ -15,7 +15,8 @@ Component4017::Component4017(const std::string& name)
 	_pins = std::vector<Pin *>(15);
 
 	for (int i = 0; i != 15; i++)
-		_pins[i] = new Pin(nullptr);
+		_pins[i] = new Pin([&, i](){std::cout << "4017 not done" << std::endl;
+		return this->getPin(i + 1)->getState();});
 }
 
 Component4017::~Component4017()

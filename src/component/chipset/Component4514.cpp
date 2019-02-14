@@ -13,7 +13,6 @@ Component4514::Component4514(const std::string& name)
 		: Component(name)
 {
 	_pins = std::vector<Pin *>(24);
-	std::vector<nts::Pin *> tab = _pins;
 	int truthTable[16][4] = {
 			{ 0, 0, 0, 0 },
 			{ 0, 0, 0, 1 },
@@ -35,9 +34,9 @@ Component4514::Component4514(const std::string& name)
 
 	for (int i = 0; i != 24; i++) {
 		if ((i >= 3 && i <= 10) || (i >= 12 && i <= 19)) {
-			_pins[i] = new Pin([tab, truthTable, i]()->Tristate
+			_pins[i] = new Pin([&, truthTable, i]()->Tristate
 			{
-				int sequence[5] = {tab[21]->compute(), tab[20]->compute(), tab[2]->compute(), tab[1]->compute(), tab[22]->compute()};
+				int sequence[5] = {this->getPin(21+1)->compute(), this->getPin(20+1)->compute(), this->getPin(2+1)->compute(), this->getPin(1+1)->compute(), this->getPin(22+1)->compute()};
 				bool comparaisonSucceed = true;
 				bool hasUndefined = false;
 				int i = 0;
@@ -62,12 +61,12 @@ Component4514::Component4514(const std::string& name)
 
 			});
 		} else {
-			_pins[i] = new Pin([tab, i]()->Tristate
+			_pins[i] = new Pin([&, i]()->Tristate
 			{
-				class Pin *pin = tab[i]->getLink();
+				class Pin *pin = this->getPin(i+1)->getLink();
 
 				if (!pin)
-				return (tab[i]->getState());
+				return (this->getPin(i+1)->getState());
 				return (pin->compute());
 			});
 		}

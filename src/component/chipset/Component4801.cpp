@@ -15,7 +15,8 @@ Component4801::Component4801(const std::string& name)
 	_pins = std::vector<Pin *>(24);
 
 	for (int i = 0; i != 24; i++)
-		_pins[i] = new Pin(nullptr);
+		_pins[i] = new Pin([&, i](){std::cout << "4801 not done" << std::endl;
+		return this->getPin(i + 1)->getState();});
 }
 
 Component4801::~Component4801()

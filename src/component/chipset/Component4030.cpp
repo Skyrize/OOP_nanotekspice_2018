@@ -13,7 +13,6 @@ Component4030::Component4030(const std::string& name)
 : Component(name)
 {
 	_pins = std::vector<Pin *>(14);
-    std::vector<nts::Pin *> tab = _pins;
 
 	for (int i = 1; i != 15; i++) {
         if (i == 3 || i == 4 || i == 10 || i == 11) {

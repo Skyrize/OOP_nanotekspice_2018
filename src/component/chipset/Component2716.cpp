@@ -15,7 +15,8 @@ Component2716::Component2716(const std::string& name, const std::string &fileNam
 	_pins = std::vector<Pin *>(24);
 
 	for (int i = 0; i != 24; i++)
-		_pins[i] = new Pin(nullptr);
+		_pins[i] = new Pin([&, i](){std::cout << "2716 not done" << std::endl;
+		return this->getPin(i + 1)->getState();});
 
 }
 
