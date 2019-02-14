@@ -11,6 +11,7 @@
 #include "NanoError.hpp"
 #include "Parser.hpp"
 #include "string.h"
+#include <exception>
 
 int main(int ac, char **av)
 {
@@ -30,6 +31,9 @@ int main(int ac, char **av)
     } catch (nts::NanoError &e) {
     	std::cerr << e.what() << std::endl;
     	return 84;
+    } catch (std::exception &e) {
+        std::cerr << e.what() << std::endl;
+        return 84;
     }
     return 0;
 }
