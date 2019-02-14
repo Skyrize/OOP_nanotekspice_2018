@@ -132,9 +132,9 @@ void Parser::parseComponent(std::string &line, Circuit *circuit)
 					Factory::createComponent(lineContent[0], lineContent[1])));
 	IComponent *elem = newComponent.get();
 
-	if (lineContent[0] == "input") {
+	if (dynamic_cast<Input *>(elem)) {
 		circuit->pushInput(newComponent);
-	} else if (lineContent[0] == "output") {
+	} else if (dynamic_cast<Output *>(elem)) {
 		circuit->pushOutput(newComponent);
 	} else {
 		circuit->pushComponent(newComponent);
