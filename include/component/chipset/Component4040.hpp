@@ -13,9 +13,15 @@
 namespace nts {
 
 class Component4040: public Component {
+	protected:
+		int memoryClock = 0;
 	public:
 		Component4040(const std::string& name);
 		virtual ~Component4040();
+		void incrementMemoryClock();
+		void resetMemoryClock();
+
+		Tristate getOutputStatus(size_t outputPin);
 };
 
 } /* namespace nts */
