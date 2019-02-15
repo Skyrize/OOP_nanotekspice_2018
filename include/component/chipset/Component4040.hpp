@@ -15,6 +15,8 @@ namespace nts {
 class Component4040: public Component {
 	protected:
 		int memoryClock = 0;
+		int openPin = 0;
+		Tristate previousClockState = Tristate::UNDEFINED;
 	public:
 		Component4040(const std::string& name);
 		virtual ~Component4040();
@@ -22,6 +24,8 @@ class Component4040: public Component {
 		void resetMemoryClock();
 
 		Tristate getOutputStatus(size_t outputPin);
+		void setPreviousClockState(Tristate state);
+		Tristate getPreviousClockState();
 };
 
 } /* namespace nts */

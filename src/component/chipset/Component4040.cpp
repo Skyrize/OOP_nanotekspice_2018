@@ -18,17 +18,26 @@ Component4040::Component4040(const std::string& name)
 		if (i == 10) {
 			_pins[i] = new Pin([&, i]()
 			{
-				if (this->getPin(i + 1)->getState() == Tristate::TRUE)
+			    class Pin *pin = this->getPin(i + 1)->getLink();
+
+			    if (!pin) {
+					if (this->getPin(i + 1)->getState() == Tristate::TRUE)
+						this->resetMemoryClock();
+			        return (this->getPin(i + 1)->getState());
+				}
+				if (pin->getState() == Tristate::TRUE)
 					this->resetMemoryClock();
-				return this->getPin(i + 1)->getState();
+			    return (pin->compute());
 			});
 
 		} else if ((i >= 0 && i <= 6) || i == 8 || (i >= 11 && i <= 14)) {
 			_pins[i] = new Pin([&, i]()
 			{
-				if (this->getPin(11)->getState() == Tristate::TRUE) {
+				Tristate resetState = this->getPin(11)->compute();
+				this->getPin(10)->compute();
+				if (resetState == Tristate::TRUE) {
 					return Tristate::FALSE;
-				} else if (this->getPin(11)->getState() == Tristate::UNDEFINED) {
+				} else if (resetState == Tristate::UNDEFINED) {
 					return Tristate::UNDEFINED;
 				} else {
 					return this->getOutputStatus(i + 1);
@@ -38,13 +47,28 @@ Component4040::Component4040(const std::string& name)
 			_pins[i] = new Pin([&, i]()
 			{
 			    class Pin *pin = this->getPin(i + 1)->getLink();
+				Tristate computed = this->getPin(i + 1)->getState();
 
-			    if (!pin)
-			        return (this->getPin(i + 1)->getState());
-			    return (pin->compute());
+			    if (pin)
+			        computed = pin->compute();
+				if (this->getPreviousClockState() != computed) {
+					this->incrementMemoryClock();
+					this->setPreviousClockState(computed);
+				}
+			    return (computed);
 			});
 		}
 	}
+}
+
+Tristate Component4040::getPreviousClockState()
+{
+	return this->previousClockState;
+}
+
+void Component4040::setPreviousClockState(Tristate state)
+{
+	this->previousClockState = state;
 }
 
 Tristate Component4040::getOutputStatus(size_t outputPin)
@@ -67,14 +91,17 @@ Tristate Component4040::getOutputStatus(size_t outputPin)
 		if (this->memoryClock >= 4096)
 			return Tristate::FALSE;
 		for (int i = 0; i != 12; i++) {
-			if (i != 11 && tab[i + 1][0] == this->memoryClock && tab[i + 1][1] == outputPin) {
-				return Tristate::FALSE;
-			}
 			if (tab[i][0] == this->memoryClock && tab[i][1] == outputPin) {
-				return Tristate::TRUE;
+				this->openPin = outputPin;
+			}
+			if (i != 11 && tab[i + 1][0] == this->memoryClock && tab[i][1] == outputPin) {
+				this->getPin(tab[i][1])->setState(Tristate::FALSE);
+				this->openPin = 0;
 			}
 		}
-		return this->getPin(outputPin)->getState();
+		if (this->openPin == outputPin)
+			return Tristate::TRUE;
+		return Tristate::FALSE;
 }
 
 
