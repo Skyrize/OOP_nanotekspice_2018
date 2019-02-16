@@ -52,8 +52,15 @@ void nts::Circuit::pushOutput(std::unique_ptr<IComponent> &output)
 
 void nts::Circuit::display() const
 {
+    Tristate state = UNDEFINED;
+
     for (auto &i : _outputs) {
-        std::cout << i->getName() << "=" << i->getPin(1)->getState() << std::endl;
+        state = i->getPin(1)->getState();
+        std::cout << i->getName() << "=";
+        if (state == UNDEFINED)
+            std::cout << "U" << std::endl;
+        else
+            std::cout << state << std::endl;
     }
 }
 
@@ -62,7 +69,7 @@ void nts::Circuit::setInputValue(const std::string &name, size_t value)
     for (auto &i : _inputs) {
         if (name == i->getName()) {
             if (dynamic_cast<nts::Clock *>(i.get())) {
-                std::cerr << "U" << std::endl;
+                std::cerr << "Please give a valid input." << std::endl;
                 return;
             }
             i->getPin(1)->setState((Tristate)value);
@@ -73,13 +80,16 @@ void nts::Circuit::setInputValue(const std::string &name, size_t value)
 void nts::Circuit::run()
 {
     Clock *c = nullptr;
+    Tristate state = UNDEFINED;
 
     for (auto &i : _outputs) {
         i->compute(1);
     }
     for (auto &i : _inputs) {
-        if (c = dynamic_cast<nts::Clock *>(i.get()))
-            c->getPin(1)->setState((nts::Tristate)!c->getPin(1)->getState());
+        if (c = dynamic_cast<nts::Clock *>(i.get())) {
+            state = c->getPin(1)->getState();
+            c->getPin(1)->setState(state == TRUE ? FALSE : TRUE);
+        }
     }
 }
 

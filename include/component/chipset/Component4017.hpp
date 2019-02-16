@@ -16,6 +16,17 @@ class Component4017: public Component {
 	public:
 		Component4017(const std::string& name);
 		virtual ~Component4017();
+        Tristate getPreviousCp0() const { return _cp0; };
+        Tristate getPreviousCp1() const { return _cp1; };
+        void setPreviousCp0(Tristate state) { _cp0 = state; };
+        void setPreviousCp1(Tristate state) { _cp1 = state; };
+        short getSequence() const { return _sequence; };
+        void setSequence(short sequence) { _sequence = sequence; };
+
+    private:
+        short _sequence = 0;
+        Tristate _cp0 = UNDEFINED;
+        Tristate _cp1 = UNDEFINED;
 };
 
 } /* namespace nts */
