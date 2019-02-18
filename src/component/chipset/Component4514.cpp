@@ -36,11 +36,11 @@ Component4514::Component4514(const std::string& name)
 		if ((i >= 3 && i <= 10) || (i >= 12 && i <= 19)) {
 			_pins[i] = new Pin([&, truthTable, i]()->Tristate
 			{
-				int sequence[5] = {this->getPin(21+1)->compute(), this->getPin(20+1)->compute(), this->getPin(2+1)->compute(), this->getPin(1+1)->compute(), this->getPin(22+1)->compute()};
+				int sequence[6] = {this->getPin(21+1)->compute(), this->getPin(20+1)->compute(), this->getPin(2+1)->compute(), this->getPin(1+1)->compute(), this->getPin(22+1)->compute(), this->getPin(1)->compute()};
 				bool comparaisonSucceed = true;
 				int i = 0;
 
-				if (sequence[5] == 1)
+				if (sequence[5] == 1 || sequence[6] == 0)
 					return Tristate::FALSE;
 				for (; i != 16; i++, comparaisonSucceed = true) {
 					for (int j = 0; j != 4; j++) {
