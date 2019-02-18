@@ -37,9 +37,6 @@ SRC	=	src/main.cpp								\
 		src/component/special/Input.cpp				\
 		src/component/special/Output.cpp			\
 		src/component/special/True.cpp				\
-													
-		
-		
 
 OBJS	=	$(SRC:.cpp=.o)
 
