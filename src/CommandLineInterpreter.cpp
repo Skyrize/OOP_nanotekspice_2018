@@ -75,7 +75,8 @@ void nts::CommandLineInterpreter::start(nts::Circuit *circuit)
     circuit->display();
     while (1) {
         if (std::cin.eof()) {
-            std::cout << std::endl;
+            if (_cmd != "exit")
+                std::cout << std::endl;
             exit (0);
         }
         getLine();
