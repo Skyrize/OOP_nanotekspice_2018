@@ -6,6 +6,7 @@
  */
 
 #include "Component4040.hpp"
+#include <map>
 
 namespace nts {
 
@@ -19,15 +20,13 @@ Component4040::Component4040(const std::string& name)
 			_pins[i] = new Pin([&, i]()
 			{
 			    class Pin *pin = this->getPin(i + 1)->getLink();
+				Tristate computed = this->getPin(i + 1)->getState();
 
-			    if (!pin) {
-					if (this->getPin(i + 1)->getState() == Tristate::TRUE)
-						this->resetMemoryClock();
-			        return (this->getPin(i + 1)->getState());
-				}
-				if (pin->getState() == Tristate::TRUE)
+			    if (pin)
+			        computed = pin->compute();
+				if (computed == Tristate::TRUE)
 					this->resetMemoryClock();
-			    return (pin->compute());
+			    return (computed);
 			});
 
 		} else if ((i >= 0 && i <= 6) || i == 8 || (i >= 11 && i <= 14)) {
@@ -51,8 +50,8 @@ Component4040::Component4040(const std::string& name)
 
 			    if (pin)
 			        computed = pin->compute();
-				if (this->getPreviousClockState() != computed && computed == Tristate::FALSE && this->isClockStarting() == false) {
-					this->incrementMemoryClock();
+				if (computed == Tristate::FALSE && this->getPreviousClockState() == Tristate::TRUE) {
+						this->incrementMemoryClock();
 				}
 				 this->setPreviousClockState(computed);
 			    return (computed);
@@ -73,35 +72,30 @@ void Component4040::setPreviousClockState(Tristate state)
 
 Tristate Component4040::getOutputStatus(size_t outputPin)
 {
-	int tab[12][2] = {
-		{1, 9},
-		{2, 7},
-		{4, 6},
-		{8, 5},
-		{16, 3},
-		{32, 2},
-		{64, 4},
-		{128, 13},
-		{256, 12},
-		{512, 14},
-		{1024, 15},
-		{2048, 1}
-		};
+	int binary[12] = {0};
+	int clock = this->memoryClock;
 
-		if (this->memoryClock >= 4096)
-			return Tristate::FALSE;
-		for (int i = 0; i != 12; i++) {
-			if (tab[i][0] == this->memoryClock && tab[i][1] == outputPin) {
-				this->openPin = outputPin;
-			}
-			if (i != 11 && tab[i + 1][0] == this->memoryClock && tab[i][1] == outputPin) {
-				this->getPin(tab[i][1])->setState(Tristate::FALSE);
-				this->openPin = 0;
-			}
-		}
-		if (this->openPin == outputPin)
-			return Tristate::TRUE;
+	if (this->memoryClock >= 4096)
 		return Tristate::FALSE;
+	for (int i = 0; i != 12; i++) {
+		binary[i] = clock % 2;
+		clock = clock / 2;
+	}
+	std::map<size_t, int> outputs = {
+		{9, 0},
+		{7, 1},
+		{6, 2},
+		{5, 3},
+		{3, 4},
+		{2, 5},
+		{4, 6},
+		{13, 7},
+		{12, 8},
+		{14, 9},
+		{15, 10},
+		{1, 11}
+		};
+	return (Tristate)binary[outputs[outputPin]];
 }
 
 
@@ -113,9 +107,10 @@ void Component4040::incrementMemoryClock()
 void Component4040::resetMemoryClock()
 {
 	this->memoryClock = 0;
+	this->previousClockState = Tristate::UNDEFINED;
 	for (int i = 0; i != 16; i++)
 		if ((i >= 0 && i <= 6) || i == 8 || (i >= 11 && i <= 14))
-			_pins[i]->setState(nts::FALSE);
+			_pins[i]->setState(Tristate::FALSE);
 }
 
 Component4040::~Component4040()

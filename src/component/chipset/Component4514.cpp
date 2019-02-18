@@ -38,26 +38,21 @@ Component4514::Component4514(const std::string& name)
 			{
 				int sequence[5] = {this->getPin(21+1)->compute(), this->getPin(20+1)->compute(), this->getPin(2+1)->compute(), this->getPin(1+1)->compute(), this->getPin(22+1)->compute()};
 				bool comparaisonSucceed = true;
-				bool hasUndefined = false;
 				int i = 0;
 
 				if (sequence[5] == 1)
 					return Tristate::FALSE;
-				for (; i != 16; i++, comparaisonSucceed = true, hasUndefined = false) {
+				for (; i != 16; i++, comparaisonSucceed = true) {
 					for (int j = 0; j != 4; j++) {
 						if (sequence[j] == Tristate::UNDEFINED)
-							hasUndefined = true;
+							return Tristate::UNDEFINED;
 						else if (sequence[j] != truthTable[i][j])
 							comparaisonSucceed = false;
 					}
-					if (comparaisonSucceed == true) {
-						if (hasUndefined == true)
-							return (Tristate::UNDEFINED);
-						else
-							return (Tristate::TRUE);
-					}
+					if (comparaisonSucceed == true)
+						return (Tristate::TRUE);
 				}
-				return Tristate::TRUE;
+				return Tristate::UNDEFINED;
 
 			});
 		} else {
