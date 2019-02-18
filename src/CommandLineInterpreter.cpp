@@ -82,6 +82,8 @@ void nts::CommandLineInterpreter::start(nts::Circuit *circuit)
         else
             std::cerr << "Wrong command." << std::endl;
     }
+    if (_cmd != "exit")
+        std::cout << std::endl;
 }
 
 void nts::CommandLineInterpreter::getLine()
