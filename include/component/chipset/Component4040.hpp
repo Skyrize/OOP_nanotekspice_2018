@@ -14,7 +14,7 @@ namespace nts {
 
 class Component4040: public Component {
 	protected:
-		int memoryClock = -1;
+		int memoryClock = 0;
 		int openPin = 0;
 		Tristate previousClockState = Tristate::UNDEFINED;
 	public:
@@ -23,7 +23,7 @@ class Component4040: public Component {
 		void incrementMemoryClock();
 		void resetMemoryClock();
 		bool isClockStarting() {
-			if (memoryClock == -1)
+			if (this->previousClockState == Tristate::UNDEFINED)
 				return true;
 			return false;
 			};

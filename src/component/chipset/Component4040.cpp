@@ -51,14 +51,10 @@ Component4040::Component4040(const std::string& name)
 
 			    if (pin)
 			        computed = pin->compute();
-				if (this->getPreviousClockState() != computed) {
-					if (computed == Tristate::FALSE) {
-						if (this->isClockStarting() == true)
-							this->incrementMemoryClock();
+				if (this->getPreviousClockState() != computed && computed == Tristate::FALSE && this->isClockStarting() == false) {
 					this->incrementMemoryClock();
-					}
-					this->setPreviousClockState(computed);
 				}
+				 this->setPreviousClockState(computed);
 			    return (computed);
 			});
 		}
