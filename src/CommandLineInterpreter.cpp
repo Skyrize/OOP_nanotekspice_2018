@@ -74,6 +74,10 @@ void nts::CommandLineInterpreter::start(nts::Circuit *circuit)
     circuit->run();
     circuit->display();
     while (1) {
+        if (std::cin.eof()) {
+            std::cout << std::endl;
+            exit (0);
+        }
         getLine();
         if (_cmd.find('=') != std::string::npos) {
             setInputValue(circuit);
@@ -90,9 +94,5 @@ void nts::CommandLineInterpreter::getLine()
 
     std::cout << "> ";
     std::getline(std::cin, cmd);
-    if (std::cin.eof()) {
-        std::cout << std::endl;
-        exit (0);
-    }
     _cmd = cmd;
 }
