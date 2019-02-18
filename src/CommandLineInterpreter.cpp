@@ -90,7 +90,9 @@ void nts::CommandLineInterpreter::getLine()
 
     std::cout << "> ";
     std::getline(std::cin, cmd);
-    if (std::cin.eof())
+    if (std::cin.eof()) {
+        std::cout << std::endl;
         exit (0);
+    }
     _cmd = cmd;
 }
