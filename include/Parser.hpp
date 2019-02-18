@@ -21,22 +21,25 @@ namespace nts {
 			std::map<std::string, IComponent *> components;
 
 		private:
-			void performChipsetParsing(Circuit *circuit);
-			void performLinksParsing(Circuit *circuit);
+			void performChipsetParsing(Circuit *circuit, std::vector<std::vector<std::string>> &content);
+			void performLinksParsing(Circuit *circuit, std::vector<std::vector<std::string>> &content);
 			void performArgumentsParsing(int nbArgs, char **arguments);
 
 
 			void skipCommentsAndEmptyLines(std::string &line);
 			std::vector<std::string> getLineContent(std::string &line, const char &delimiter);
 
-			void parseComponent(std::string &line, Circuit *circuit);
-			void parseLink(std::string &line, Circuit *circuit);
+			void parseComponent(std::string type, std::string name, Circuit *circuit);
+			void parseLink(std::string comp1, std::string comp2, Circuit *circuit);
 			void parseArgument(std::string argument);
 
 			size_t getComponentPin(const std::string &component);
 
 			void verifyInputInitialisation();
 			void verifyOutputLinkage();
+
+			std::vector<std::string> ParseLine(std::string line);
+
 
 		public:
 				Parser(const std::string &fileName);

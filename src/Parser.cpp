@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <iterator>
 #include <memory>
+#include <string>
 #include "Input.hpp"
 #include "Output.hpp"
 #include "Parser.hpp"
@@ -34,6 +35,7 @@ Parser::~Parser()
 void Parser::skipCommentsAndEmptyLines(std::string &line)
 {
 	while (std::getline(ntsFile, line)) {
+		line.erase(line.begin(), std::find_if(line.begin(), line.end(), std::bind1st(std::not_equal_to<char>(), ' ')));
 		if (line.empty() || line.at(0) == '#') {
 			continue;
 		} else
@@ -79,57 +81,38 @@ size_t Parser::getComponentPin(const std::string &component)
 	return value;
 }
 
-void Parser::parseLink(std::string &line, Circuit *circuit)
+void Parser::parseLink(std::string comp1, std::string comp2, Circuit *circuit)
 {
-	std::replace(line.begin(), line.end(), '\t', ' ');
-	std::vector<std::string> lineContent = getLineContent(line, ' ');
-
-	if (lineContent.size() != 2)
-		throw CircuitFileError(
-				"Linkage error. Usage: \'componentX:pinX \'componentY:pinY\'");
-
-	std::vector<std::string> linkContent01 = getLineContent(lineContent[0],
-			':');
-	std::vector<std::string> linkContent02 = getLineContent(lineContent[1],
-			':');
+	std::vector<std::string> linkContent01 = getLineContent(comp1, ':');
+	std::vector<std::string> linkContent02 = getLineContent(comp2, ':');
 	IComponent *link01 = components[linkContent01[0]];
 	IComponent *link02 = components[linkContent02[0]];
 
 	if (!link01 || !link02)
 		throw ComponentNameError();
 
-	size_t pin1 = getComponentPin(lineContent[0]);
-	size_t pin2 = getComponentPin(lineContent[1]);
+	size_t pin1 = getComponentPin(comp1);
+	size_t pin2 = getComponentPin(comp2);
 	link01->setLink(pin1, *link02, pin2);
 }
 
-void Parser::performLinksParsing(Circuit *circuit)
+void Parser::performLinksParsing(Circuit *circuit, std::vector<std::vector<std::string>> &content)
 {
-	std::string line;
-
-	while (std::getline(ntsFile, line)) {
-		std::replace(line.begin(), line.end(), '\t', ' ');
-		if (line.empty() || line.at(0) == '#') {
-			continue;
-		}
-
-		parseLink(line, circuit);
+	if (content.size() == 0)
+		throw MissingLinksSectionError();
+	content.erase(content.begin());
+	while (content.size() > 0) {
+		if (content[0].size() != 2)
+			throw CircuitFileError();
+		parseLink(content[0][0], content[0][1], circuit);
+		content.erase(content.begin());
 	}
 }
 
-void Parser::parseComponent(std::string &line, Circuit *circuit)
+void Parser::parseComponent(std::string type, std::string name, Circuit *circuit)
 {
-	std::replace(line.begin(), line.end(), '\t', ' ');
-	std::vector<std::string> lineContent = getLineContent(line, ' ');
-
-	if (lineContent.size() == 1)
-		throw CircuitFileError(
-				"Component \'" + lineContent[0]
-						+ "\' must be provided with a name.");
-
 	std::unique_ptr<IComponent> newComponent(
-			std::move(
-					Factory::createComponent(lineContent[0], lineContent[1])));
+			std::move(Factory::createComponent(type, name)));
 	IComponent *elem = newComponent.get();
 
 	if (dynamic_cast<Input *>(elem)) {
@@ -139,35 +122,26 @@ void Parser::parseComponent(std::string &line, Circuit *circuit)
 	} else {
 		circuit->pushComponent(newComponent);
 	}
-	if (this->components[lineContent[1]])
+	if (this->components[name])
 		throw RedefinedComponentError();
 
-	if (lineContent[1].find('(') == std::string::npos) {
-		this->components[lineContent[1]] = elem;
+	if (name.find('(') == std::string::npos) {
+		this->components[name] = elem;
 	} else {
-		this->components[lineContent[1].substr(0, lineContent[1].find('('))] =
-				elem;
+		this->components[name.substr(0, name.find('('))] = elem;
 	}
 }
 
-void Parser::performChipsetParsing(Circuit *circuit)
+void Parser::performChipsetParsing(Circuit *circuit, std::vector<std::vector<std::string>> &content)
 {
-	std::string line;
-
-	while (line != ".links:") {
-		if (line.empty() || line.at(0) == '#') {
-
-			if (!getline(ntsFile, line))
-				throw MissingLinksSectionError();
-			continue;
-
-		} else {
-			parseComponent(line, circuit);
-		}
-
-		if (!getline(ntsFile, line))
-			throw MissingLinksSectionError();
-
+	if (content[0][0] != ".chipsets:")
+		throw MissingChipsetSectionError();
+	content.erase(content.begin());
+	while (content.size() > 0 && content[0][0] != ".links:") {
+		if (content[0].size() != 2)
+			throw CircuitFileError();
+		parseComponent(content[0][0], content[0][1], circuit);
+		content.erase(content.begin());
 	}
 }
 
@@ -222,25 +196,53 @@ void Parser::verifyOutputLinkage()
 	}
 }
 
+std::vector<std::string> Parser::ParseLine(std::string line)
+{
+	if (line.empty())
+		return std::vector<std::string> ();
+	std::replace(line.begin(), line.end(), '\t', ' ');
+
+	if (line.find('#') != std::string::npos) {
+		line.insert(line.find('#'), " ");
+		line.insert(line.find('#') + 1, " ");
+	}
+	std::vector<std::string> lineContent = getLineContent(line, ' ');
+
+	if (line.find('#') != std::string::npos) {
+		auto finder2 = std::find(lineContent.begin(), lineContent.end(), "#");
+		lineContent.erase(finder2, lineContent.end());
+		
+	}
+	return lineContent;
+}
+
 Circuit* Parser::processParsing(int nbArgs, char **arguments)
 {
 	Circuit *circuit = new Circuit();
 	std::string line;
+	std::vector<std::vector<std::string>> content;
 
-	skipCommentsAndEmptyLines(line);
-	if (line.empty() == true)
-		throw CircuitFileError(
-				"Warning: file provided is empty of comment-only");
-	if (line != ".chipsets:") {
-		throw MissingChipsetSectionError(
-				"Expected \".chipsets:\" section but got \"" + line + "\"");
-	} else {
-		performChipsetParsing(circuit);
-		performLinksParsing(circuit);
-		performArgumentsParsing(nbArgs, arguments);
-		verifyInputInitialisation();
-		verifyOutputLinkage();
+	while (std::getline(ntsFile, line)) {
+		std::vector<std::string> tmp = ParseLine(line);
+		if (tmp.empty())
+			continue;
+		content.push_back(tmp);
 	}
+	//content.erase(content.begin());
+	// for (auto e : content) {
+	// 	for (auto a : e)
+	// 		std::cout << a << " | ";
+	// 	std::cout << std::endl;
+	// }
+		
+	if (content.empty())
+		throw CircuitFileError("Warning: file provided is empty of comment-only");
+	performChipsetParsing(circuit, content);
+	performLinksParsing(circuit, content);
+
+	performArgumentsParsing(nbArgs, arguments);
+	verifyInputInitialisation();
+	verifyOutputLinkage();
 	this->ntsFile.close();
 	return circuit;
 }
