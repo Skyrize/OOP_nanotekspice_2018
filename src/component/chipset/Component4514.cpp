@@ -30,30 +30,43 @@ Component4514::Component4514(const std::string& name)
 			{ 1, 1, 0, 1 },
 			{ 1, 1, 1, 0 },
 			{ 1, 1, 1, 1 },
-		};
+	};
+    int arr[16] = {11, 9, 10, 8, 7, 6, 5, 4, 18, 17, 20, 19, 14, 13, 16, 15};
 
 	for (int i = 0; i != 24; i++) {
 		if ((i >= 3 && i <= 10) || (i >= 12 && i <= 19)) {
-			_pins[i] = new Pin([&, truthTable, i]()->Tristate
+			_pins[i] = new Pin([&, truthTable, arr, i]()->Tristate
 			{
-				int sequence[6] = {this->getPin(21+1)->compute(), this->getPin(20+1)->compute(), this->getPin(2+1)->compute(), this->getPin(1+1)->compute(), this->getPin(22+1)->compute(), this->getPin(1)->compute()};
+				int sequence[6] = {this->getPin(21+1)->compute(),
+                                    this->getPin(20+1)->compute(),
+                                    this->getPin(2+1)->compute(),
+                                    this->getPin(1+1)->compute(),
+                                    this->getPin(22+1)->compute(),
+                                    this->getPin(1)->compute()
+                                };
 				bool comparaisonSucceed = true;
-				int i = 0;
+                int x = 0;
+                int on = 0;
 
-				if (sequence[5] == 1 || sequence[6] == 0)
+				if (sequence[4] == 1)
 					return Tristate::FALSE;
-				for (; i != 16; i++, comparaisonSucceed = true) {
-					for (int j = 0; j != 4; j++) {
-						if (sequence[j] == Tristate::UNDEFINED)
-							return Tristate::UNDEFINED;
-						else if (sequence[j] != truthTable[i][j])
-							comparaisonSucceed = false;
-					}
-					if (comparaisonSucceed == true)
-						return (Tristate::TRUE);
-				}
-				return Tristate::UNDEFINED;
-
+                else if (sequence[5] == 0)
+                    return Tristate::UNDEFINED;
+				for (int j = 0; j < 16; j++) {
+                    for (x = 0; x < 4; x++)
+                        if (sequence[x] == Tristate::UNDEFINED)
+                            return Tristate::UNDEFINED;
+                        else if (sequence[x] != truthTable[j][x])
+                            break;
+                    if (x == 4) {
+                        on = j;
+                        break;
+                    }
+                }
+                for (int j = 0; j < 16; j++)
+                    this->getPin(arr[j])->setState(FALSE);
+                this->getPin(arr[on])->setState(TRUE);
+				return this->getPin(i + 1)->getState();
 			});
 		} else {
 			_pins[i] = new Pin([&, i]()->Tristate
@@ -61,7 +74,7 @@ Component4514::Component4514(const std::string& name)
 				class Pin *pin = this->getPin(i+1)->getLink();
 
 				if (!pin)
-				return (this->getPin(i+1)->getState());
+				    return (this->getPin(i+1)->getState());
 				return (pin->compute());
 			});
 		}

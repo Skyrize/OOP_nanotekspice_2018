@@ -2,3 +2,4 @@ test.sh
 nanotekspice
 *.o
 samples/*
+nanotespice_simon

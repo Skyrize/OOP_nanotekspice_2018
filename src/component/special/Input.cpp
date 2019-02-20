@@ -15,7 +15,7 @@ Input::Input(const std::string &name, Tristate value)
 {
 	_pins = std::vector<Pin *>(1);
 
-	_pins[0] = new Pin([&, value]() -> Tristate {
+	_pins[0] = new Pin([&]() -> Tristate {
         return this->getPin(1)->getState();
     }, value);
 }
