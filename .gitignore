@@ -1,3 +1,7 @@
+.vscode/
+.cproject
+.project
+.settings/
 test.sh
 nanotekspice
 *.o
