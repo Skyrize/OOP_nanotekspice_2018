@@ -14,17 +14,21 @@ Component4013::Component4013(const std::string& name)
 {
 	_pins = std::vector<Pin *>(14);
 	int truthTable[5][6] = {
-			{ 1, 0, 0, 0, 0, 1 },
-			{ 1, 1, 0, 0, 1, 0 },
-			{ -1, -1, 1, 0, 0, 1 },
-			{ -1, -1, 0, 1, 1, 0 },
+			{ 1, 0, 0, 0, 1, 0 },
+			{ 1, 1, 0, 0, 0, 1 },
+			{ -1, -1, 1, 0, 1, 0 },
+			{ -1, -1, 0, 1, 0, 1 },
 			{ -1, -1, 1, 1, 1, 1 }
 	};
 
 	for (int c = 0; c != 14; c++) {
 		if (c == 0 || c == 1) {
 			_pins[c] = new Pin([&, truthTable, c]() {
-				int sequence[4] = {this->getPin(2 + 1)->compute(), this->getPin(3 + 1)->compute(), this->getPin(4 + 1)->compute(), this->getPin(5 + 1)->compute()};
+				int sequence[4] = {this->getPin(2 + 1)->compute(),
+                                    this->getPin(3 + 1)->compute(),
+                                    this->getPin(4 + 1)->compute(),
+                                    this->getPin(5 + 1)->compute()
+                                };
 				bool comparaisonSucceed = true;
 				bool hasUndefined = false;
 				int i = 0;
@@ -51,7 +55,11 @@ Component4013::Component4013(const std::string& name)
 			});
 		} else if (c == 11 || c == 12) {
 			_pins[c] = new Pin([&, truthTable, c]() {
-                int sequence[4] = {this->getPin(7+1)->compute(), this->getPin(8+1)->compute(), this->getPin(9+1)->compute(), this->getPin(1+10)->compute()};
+                int sequence[4] = {this->getPin(7+1)->compute(),
+                                    this->getPin(8+1)->compute(),
+                                    this->getPin(9+1)->compute(),
+                                    this->getPin(1+10)->compute()
+                                };
                 bool comparaisonSucceed = true;
                 bool hasUndefined = false;
                 int i = 0;
