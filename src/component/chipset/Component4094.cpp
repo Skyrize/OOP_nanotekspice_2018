@@ -15,9 +15,9 @@ Component4094::Component4094(const std::string& name)
 	_pins = std::vector<Pin *>(16);
 
 	int truthTable[6][4] = {
-			{ 1, 0, -2, -2 },
-			{ 0, 0, -2, -2 },
-			{ 1, 1, 0, -2 },
+			{ 1, 0, -1, -1 },
+			{ 0, 0, -1, -1 },
+			{ 1, 1, 0, -1 },
 			{ 1, 1, 1, 0 },
 			{ 1, 1, 1, 1 },
 			{ 0, 1, 1, 1 } };
@@ -26,7 +26,7 @@ Component4094::Component4094(const std::string& name)
 		if (c == 3) {
 			_pins[c] = new Pin(
 							[&, truthTable, c]() {
-								int sequence[4] = {this->getPin(1)->compute(), this->getPin(15)->compute(), this->getPin(2)->compute(), this->getPin(3)->compute()};
+								int sequence[4] = {this->getPin(3)->compute(), this->getPin(15)->compute(), this->getPin(1)->compute(), this->getPin(2)->compute()};
 								bool comparaisonSucceed = true;
 								bool hasUndefined = false;
 								int i = 0;
@@ -34,7 +34,7 @@ Component4094::Component4094(const std::string& name)
 								for (; i != 6; i++, comparaisonSucceed = true, hasUndefined = false) {
 
 									for (int j = 0; j != 4; j++) {
-										if (truthTable[i][j] != -1)
+										if (truthTable[i][j] == -1)
 										continue;
 										if (sequence[j] == Tristate::UNDEFINED)
 										hasUndefined = true;
@@ -62,7 +62,7 @@ Component4094::Component4094(const std::string& name)
 			_pins[c] =
 					new Pin(
 							[&, truthTable, c]() {
-								int sequence[4] = {this->getPin(1)->compute(), this->getPin(15)->compute(), this->getPin(2)->compute(), this->getPin(3)->compute()};
+								int sequence[4] = {this->getPin(3)->compute(), this->getPin(15)->compute(), this->getPin(1)->compute(), this->getPin(2)->compute()};
 								bool comparaisonSucceed = true;
 								bool hasUndefined = false;
 								int i = 0;
@@ -70,7 +70,7 @@ Component4094::Component4094(const std::string& name)
 								for (; i != 6; i++, comparaisonSucceed = true, hasUndefined = false) {
 
 									for (int j = 0; j != 4; j++) {
-										if (truthTable[i][j] != -1)
+										if (truthTable[i][j] == -1)
 										continue;
 										if (sequence[j] == Tristate::UNDEFINED)
 										hasUndefined = true;
@@ -96,7 +96,7 @@ Component4094::Component4094(const std::string& name)
 			_pins[c] =
 					new Pin(
 							[&, truthTable, c]() {
-								int sequence[4] = {this->getPin(1)->compute(), this->getPin(15)->compute(), this->getPin(2)->compute(), this->getPin(3)->compute()};
+								int sequence[4] = {this->getPin(3)->compute(), this->getPin(15)->compute(), this->getPin(1)->compute(), this->getPin(2)->compute()};
 								bool comparaisonSucceed = true;
 								bool hasUndefined = false;
 								int i = 0;
@@ -104,7 +104,7 @@ Component4094::Component4094(const std::string& name)
 								for (; i != 6; i++, comparaisonSucceed = true, hasUndefined = false) {
 
 									for (int j = 0; j != 4; j++) {
-										if (truthTable[i][j] != -1)
+										if (truthTable[i][j] == -1)
 										continue;
 										if (sequence[j] == Tristate::UNDEFINED)
 										hasUndefined = true;
@@ -132,7 +132,7 @@ Component4094::Component4094(const std::string& name)
 			_pins[c] =
 					new Pin(
 							[&, truthTable, c]() {
-								int sequence[4] = {this->getPin(1)->compute(), this->getPin(15)->compute(), this->getPin(2)->compute(), this->getPin(3)->compute()};
+								int sequence[4] = {this->getPin(3)->compute(), this->getPin(15)->compute(), this->getPin(1)->compute(), this->getPin(2)->compute()};
 								bool comparaisonSucceed = true;
 								bool hasUndefined = false;
 								int i = 0;
@@ -140,7 +140,7 @@ Component4094::Component4094(const std::string& name)
 								for (; i != 6; i++, comparaisonSucceed = true, hasUndefined = false) {
 
 									for (int j = 0; j != 4; j++) {
-										if (truthTable[i][j] != -1)
+										if (truthTable[i][j] == -1)
 										continue;
 										if (sequence[j] == Tristate::UNDEFINED)
 										hasUndefined = true;
@@ -166,7 +166,7 @@ Component4094::Component4094(const std::string& name)
 			_pins[c] =
 					new Pin(
 							[&, truthTable, c]() {
-								int sequence[4] = {this->getPin(1)->compute(), this->getPin(15)->compute(), this->getPin(2)->compute(), this->getPin(3)->compute()};
+								int sequence[4] = {this->getPin(3)->compute(), this->getPin(15)->compute(), this->getPin(1)->compute(), this->getPin(2)->compute()};
 								bool comparaisonSucceed = true;
 								bool hasUndefined = false;
 								int i = 0;
@@ -174,7 +174,7 @@ Component4094::Component4094(const std::string& name)
 								for (; i != 6; i++, comparaisonSucceed = true, hasUndefined = false) {
 
 									for (int j = 0; j != 4; j++) {
-										if (truthTable[i][j] != -1)
+										if (truthTable[i][j] == -1)
 										continue;
 										if (sequence[j] == Tristate::UNDEFINED)
 										hasUndefined = true;
